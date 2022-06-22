@@ -1,0 +1,15 @@
+<resources>
+    <string name="app_name">SberScanner</string>
+    <string name="divisions">Divisions</string>
+    <string name="edit">Edit</string>
+    <string name="add">Add</string>
+    <string name="cancel">Cancel</string>
+    <string name="delete">Delete</string>
+    <string name="undo">Undo</string>
+    <string name="input_division_name">Input division name</string>
+    <string name="error_happened">Error happened. Check your internet connection</string>
+    <string name="division_deleted">Deleted - "%s"</string>
+    <string name="start_scan">Start scanning</string>
+    <string name="total_divisions">Total - %d divisions</string>
+    <string name="out_of_divisions">%d out of %d divisions</string>
+</resources>

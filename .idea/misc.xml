@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="DesignSurface">
+    <option name="filePathToZoomLevelMap">
+      <map>
+        <entry key="..\:/Projects/AndroidStudioProjects/SberQRScanner/app/src/main/res/drawable/rounded.xml" value="0.1" />
+        <entry key="..\:/Projects/AndroidStudioProjects/SberQRScanner/app/src/main/res/layout/activity_main.xml" value="0.14130434782608695" />
+        <entry key="..\:/Projects/AndroidStudioProjects/SberQRScanner/app/src/main/res/layout/division_check_item.xml" value="0.16666666666666666" />
+        <entry key="..\:/Projects/AndroidStudioProjects/SberQRScanner/app/src/main/res/layout/division_item.xml" value="0.3333333333333333" />
+        <entry key="..\:/Projects/AndroidStudioProjects/SberQRScanner/app/src/main/res/layout/fragment_division_list.xml" value="0.3333333333333333" />
+        <entry key="..\:/Projects/AndroidStudioProjects/SberQRScanner/app/src/main/res/layout/fragment_scanner.xml" value="0.22" />
+        <entry key="..\:/Projects/AndroidStudioProjects/SberQRScanner/app/src/main/res/menu/divisions_action_menu.xml" value="0.1796875" />
+      </map>
+    </option>
+  </component>
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="1.8" project-jdk-type="JavaSDK">
+    <output url="file://$PROJECT_DIR$/build/classes" />
+  </component>
+  <component name="ProjectType">
+    <option name="id" value="Android" />
+  </component>
+</project>

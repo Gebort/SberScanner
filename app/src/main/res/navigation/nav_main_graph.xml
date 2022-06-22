@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_main_graph"
+    app:startDestination="@id/divisionListFragment">
+
+    <fragment
+        android:id="@+id/divisionListFragment"
+        android:name="com.example.sberqrscanner.presentation.division_list.DivisionListFragment"
+        android:label="fragment_division_list"
+        tools:layout="@layout/fragment_division_list" >
+        <action
+            android:id="@+id/action_divisionListFragment_to_scannerFragment"
+            app:destination="@id/scannerFragment"
+            app:enterAnim="@android:anim/slide_in_left"
+            app:exitAnim="@android:anim/slide_out_right"
+            app:popEnterAnim="@android:anim/slide_in_left"
+            app:popExitAnim="@android:anim/slide_out_right"
+            app:popUpTo="@id/divisionListFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/scannerFragment"
+        android:name="com.example.sberqrscanner.presentation.scanner.ScannerFragment"
+        android:label="fragment_scanner"
+        tools:layout="@layout/fragment_scanner" />
+</navigation>
