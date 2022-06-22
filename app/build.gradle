@@ -63,4 +63,9 @@ dependencies {
     //Material Dialogs with EditText
     implementation 'com.afollestad.material-dialogs:core:3.3.0'
     implementation 'com.afollestad.material-dialogs:input:3.3.0'
+
+    //CameraX
+    implementation "androidx.camera:camera-camera2:1.0.0-rc01"
+    implementation "androidx.camera:camera-lifecycle:1.0.0-rc01"
+    implementation "androidx.camera:camera-view:1.0.0-alpha20"
 }
