@@ -20,7 +20,6 @@ class DivisionsListAdapter(
 
     private val adapterScope = CoroutineScope(Dispatchers.Default)
     private var rawList = listOf<Division>()
-    private var editing: Boolean = false
     private var filter: String = ""
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemViewholder {
@@ -31,15 +30,14 @@ class DivisionsListAdapter(
     }
 
     override fun onBindViewHolder(holder: DivisionsListAdapter.ItemViewholder, position: Int) {
-        holder.bind(getItem(position), editing, deleteDivision)
+        holder.bind(getItem(position), deleteDivision)
     }
 
     class ItemViewholder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        fun bind(item: Division, editing: Boolean, delete: (Division) -> Unit) = with(itemView) {
+        fun bind(item: Division, delete: (Division) -> Unit) = with(itemView) {
             val textDivision: TextView = this.findViewById(R.id.text_division_name)
             textDivision.text = item.name
             val deleteButton: ImageButton = this.findViewById(R.id.button_delete)
-            deleteButton.isVisible = editing
             deleteButton.setOnClickListener{delete(item)}
         }
     }
@@ -48,12 +46,6 @@ class DivisionsListAdapter(
         rawList = entries
         //filter = ""
         submitList(rawList)
-    }
-
-    fun setEditing(editing: Boolean){
-        this.editing = editing
-        //this.filter = filter
-        notifyDataSetChanged()
     }
 }
 

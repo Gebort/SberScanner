@@ -13,11 +13,11 @@
         android:layout_weight="1"
         android:fontFamily="sans-serif-medium"
         android:text="Сбер Технологии"
-        android:textSize="24sp" />
+        android:textSize="20sp" />
 
     <ImageButton
         android:id="@+id/button_delete"
-        android:layout_width="80dp"
+        android:layout_width="40dp"
         android:layout_height="match_parent"
         android:layout_weight="0"
         android:background="#00FFFFFF"

@@ -12,4 +12,7 @@
     <string name="start_scan">Start scanning</string>
     <string name="total_divisions">Total - %d divisions</string>
     <string name="out_of_divisions">%d out of %d divisions</string>
+    <string name="provide_camera">Please, provide the camera permission</string>
+    <string name="division_checked">%s - checked</string>
+    <string name="place_code_inside">Place the code inside</string>
 </resources>

@@ -2,6 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.sberqrscanner">
 
+    <uses-feature android:name="android.hardware.camera" />
     <uses-permission android:name="android.permission.CAMERA" />
 
     <application
@@ -15,8 +16,6 @@
         <activity
             android:name=".presentation.MainActivity"
             android:screenOrientation="portrait"
-            android:configChanges="orientation|screenSize|screenLayout"
-            android:windowSoftInputMode="stateHidden|adjustPan"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

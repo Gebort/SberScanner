@@ -2,10 +2,8 @@ package com.example.sberqrscanner
 
 import android.app.Application
 import com.example.sberqrscanner.data.repository.FirestoreDivisionRep
-import com.example.sberqrscanner.domain.use_case.DeleteDivision
-import com.example.sberqrscanner.domain.use_case.DivisionsUseCases
-import com.example.sberqrscanner.domain.use_case.GetDivisions
-import com.example.sberqrscanner.domain.use_case.InsertDivision
+import com.example.sberqrscanner.data.scanner.ScannerXCamera
+import com.example.sberqrscanner.domain.use_case.*
 
 class MyApp: Application() {
 
@@ -18,6 +16,8 @@ class MyApp: Application() {
         insertDivision,
         getDivisions
     )
+    val scanner = ScannerXCamera()
+    val bindCamera = BindCamera(scanner)
 
     override fun onCreate() {
         super.onCreate()

@@ -54,6 +54,6 @@ class DiffCallback : DiffUtil.ItemCallback<DivisionItem>() {
     }
 
     override fun areContentsTheSame(oldItem: DivisionItem, newItem: DivisionItem): Boolean {
-        return oldItem == newItem
+        return oldItem.checked == newItem.checked
     }
 }

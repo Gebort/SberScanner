@@ -29,24 +29,18 @@ private const val ARG_PARAM2 = "param2"
 
 class DivisionListFragment : Fragment() {
 
-    private var editing = false
-
     private var _binding: FragmentDivisionListBinding? = null
     private val binding get() = _binding!!
 
     private val model: DivisionListViewModel by activityViewModels()
     private var adapter: DivisionsListAdapter? = null
-    private var menu: Menu? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        setHasOptionsMenu(true)
         _binding = FragmentDivisionListBinding.inflate(inflater, container, false)
         val view = binding.root
-
-        activity?.title = resources.getString(R.string.divisions)
 
         return view
     }
@@ -55,13 +49,12 @@ class DivisionListFragment : Fragment() {
         binding.recyclerView.layoutManager = LinearLayoutManager(activity?.applicationContext)
         adapter = DivisionsListAdapter(::deleteDivision)
         binding.recyclerView.adapter = adapter
-
-        binding.buttonStartScan.setOnClickListener {
-            val direction = DivisionListFragmentDirections
-                .actionDivisionListFragmentToScannerFragment()
-            findNavController().navigate(direction)
+        binding.buttonAdd.setOnClickListener {
+            insertDivisionByDialog()
         }
-
+        binding.buttonBack.setOnClickListener {
+            findNavController().popBackStack()
+        }
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 model.state.collect { state ->
@@ -110,18 +103,6 @@ class DivisionListFragment : Fragment() {
         }
     }
 
-    override fun onResume() {
-        super.onResume()
-        setEditing(false)
-    }
-
-    private fun setEditing(editing: Boolean){
-        this.editing = editing
-        val item = menu?.findItem(R.id.action_add)
-        item?.isVisible = editing
-        adapter?.setEditing(editing)
-    }
-
     private fun deleteDivision(division: Division){
         model.onEvent(DivisionListEvent.DeleteDivision(division))
     }
@@ -138,31 +119,6 @@ class DivisionListFragment : Fragment() {
             positiveButton(R.string.add)
             negativeButton(R.string.cancel)
         }
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId){
-            R.id.action_editing -> {
-                setEditing(!editing)
-            }
-            R.id.action_add -> {
-                insertDivisionByDialog()
-            }
-        }
-
-        return super.onOptionsItemSelected(item)
-    }
-
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        super.onCreateOptionsMenu(menu, inflater)
-        this.menu = menu
-    }
-
-    override fun onPrepareOptionsMenu(menu: Menu) {
-        val addAction: MenuItem = menu.findItem(R.id.action_add)
-        addAction.isVisible = editing
-        val editAction: MenuItem = menu.findItem(R.id.action_editing)
-        editAction.isVisible = true
     }
 
     companion object {

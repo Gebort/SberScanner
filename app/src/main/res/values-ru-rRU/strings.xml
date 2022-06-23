@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">SberScanner</string>
+    <string name="divisions">Подразделения</string>
+    <string name="edit">Изменить</string>
+    <string name="add">Добавить</string>
+    <string name="cancel">Отмена</string>
+    <string name="delete">Удалить</string>
+    <string name="undo">Отмена</string>
+    <string name="input_division_name">Введите название подразделения</string>
+    <string name="error_happened">Ошибка. Проверье интернет соединение</string>
+    <string name="place_code_inside">Наведите на код</string>
+    <string name="division_checked">Отмечено - %s</string>
+    <string name="provide_camera">Предоставьте разрешение на управление камерой</string>
+    <string name="out_of_divisions">%d из %d</string>
+    <string name="total_divisions">%d подразделений</string>
+    <string name="start_scan">Начать сканирование</string>
+    <string name="division_deleted">Удалено - %s</string>
+</resources>
