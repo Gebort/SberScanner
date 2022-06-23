@@ -36,10 +36,11 @@
 
         <ImageButton
             android:id="@+id/button_edit"
-            android:layout_width="60dp"
-            android:layout_height="30dp"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
             android:layout_margin="10dp"
             android:backgroundTint="#00FFFFFF"
+            android:contentDescription="@string/edit"
             android:scaleType="centerCrop"
             android:src="@drawable/ic_edit"
             app:layout_constraintEnd_toEndOf="parent"
@@ -60,41 +61,42 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <LinearLayout
-    android:id="@+id/bottom_sheet"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@drawable/rounded"
-    android:orientation="vertical"
-    android:paddingLeft="10dp"
-    android:paddingRight="10dp"
-    app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
-
-    <ImageView
-        android:layout_width="70dp"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center|top"
-        android:scaleType="centerCrop"
-        android:src="@drawable/ic_remove" />
-
-    <TextView
-        android:id="@+id/text_view_out_of"
+        android:id="@+id/bottom_sheet"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
-        android:layout_marginBottom="10dp"
-        android:fontFamily="sans-serif-medium"
-        android:text="5 out of 17 divisions"
-        android:textAlignment="center"
-        android:textSize="24sp" />
+        android:layout_height="720dp"
+        android:background="@drawable/rounded"
+        android:orientation="vertical"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
+
+        <ImageView
+            android:layout_width="70dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center|top"
+            android:scaleType="centerCrop"
+            android:src="@drawable/ic_remove" />
+
+        <TextView
+            android:id="@+id/text_view_out_of"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="10dp"
+            android:fontFamily="sans-serif-medium"
+            android:text="5 out of 17 divisions"
+            android:textAlignment="center"
+            android:textSize="24sp" />
 
         <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recycler_view_check"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" >
+            android:id="@+id/recycler_view_check"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="10dp">
 
         </androidx.recyclerview.widget.RecyclerView>
 
 
-</LinearLayout>
+    </LinearLayout>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
