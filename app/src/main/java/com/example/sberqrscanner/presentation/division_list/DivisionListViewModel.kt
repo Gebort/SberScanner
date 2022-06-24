@@ -29,9 +29,6 @@ class DivisionListViewModel: ViewModel() {
 
     fun onEvent(event: DivisionListEvent){
         when(event){
-            is DivisionListEvent.DeleteDivision -> {
-                deleteDivision(event.division)
-            }
             is DivisionListEvent.InsertDivision -> {
                 insertDivision(event.division)
             }
@@ -51,29 +48,6 @@ class DivisionListViewModel: ViewModel() {
                 }
                 is Reaction.Success -> {
 
-                }
-            }
-            _state.value = state.value.copy(
-                loading = false
-            )
-        }
-    }
-
-    private fun deleteDivision(division: Division) {
-        viewModelScope.launch {
-            _state.value = state.value.copy(
-                loading = true
-            )
-            when (val res = divisionUseCases.deleteDivision(division)) {
-                is Reaction.Success -> {
-                    _uiEvents.trySend(
-                        DivisionListUiEvent.DivisionDeleted(division)
-                    )
-                }
-                is Reaction.Error -> {
-                    _uiEvents.trySend(
-                        DivisionListUiEvent.Error(res.error)
-                    )
                 }
             }
             _state.value = state.value.copy(

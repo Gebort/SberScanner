@@ -37,14 +37,14 @@
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_marginStart="10dp"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="8dp"
             android:layout_marginEnd="10dp"
             android:layout_marginBottom="10dp"
             android:padding="10dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/button_back" />
+            app:layout_constraintTop_toBottomOf="@+id/textView" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/button_add"
@@ -70,6 +70,15 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@drawable/ic_back" />
+
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif-light"
+            android:text="@string/select_division"
+            app:layout_constraintStart_toStartOf="@+id/text_total_divisions"
+            app:layout_constraintTop_toBottomOf="@+id/text_total_divisions" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

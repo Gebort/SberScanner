@@ -17,4 +17,12 @@
     <string name="total_divisions">%d подразделений</string>
     <string name="start_scan">Начать сканирование</string>
     <string name="division_deleted">Удалено - %s</string>
+    <string name="export">Экспортировать</string>
+    <string name="select_division">Выберите подразделение, чтобы изменить его</string>
+    <string name="division_not_selected">Подразделение не выбрано</string>
+    <string name="delete_division">Удалить -  %s?</string>
+    <string name="update">Изменить</string>
+
+
+
 </resources>

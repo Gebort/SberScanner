@@ -15,7 +15,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 
 class DivisionsListAdapter(
-    private val deleteDivision: (Division) -> Unit
+    private val onClick: (Division) -> Unit
 ): ListAdapter<Division, DivisionsListAdapter.ItemViewholder>(DiffCallback())  {
 
     private val adapterScope = CoroutineScope(Dispatchers.Default)
@@ -30,15 +30,16 @@ class DivisionsListAdapter(
     }
 
     override fun onBindViewHolder(holder: DivisionsListAdapter.ItemViewholder, position: Int) {
-        holder.bind(getItem(position), deleteDivision)
+        holder.bind(getItem(position), onClick)
     }
 
     class ItemViewholder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        fun bind(item: Division, delete: (Division) -> Unit) = with(itemView) {
+        fun bind(item: Division, onClick: (Division) -> Unit) = with(itemView) {
             val textDivision: TextView = this.findViewById(R.id.text_division_name)
             textDivision.text = item.name
-            val deleteButton: ImageButton = this.findViewById(R.id.button_delete)
-            deleteButton.setOnClickListener{delete(item)}
+            setOnClickListener {
+                onClick(item)
+            }
         }
     }
 

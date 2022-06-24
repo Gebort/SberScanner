@@ -19,6 +19,9 @@ import com.afollestad.materialdialogs.input.input
 import com.example.sberqrscanner.R
 import com.example.sberqrscanner.databinding.FragmentDivisionListBinding
 import com.example.sberqrscanner.domain.model.Division
+import com.example.sberqrscanner.presentation.division_edit.DivisionEditEvent
+import com.example.sberqrscanner.presentation.division_edit.EditDivisionUiEvent
+import com.example.sberqrscanner.presentation.division_edit.SharedDivisionViewModel
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.flow.collect
@@ -33,6 +36,7 @@ class DivisionListFragment : Fragment() {
     private val binding get() = _binding!!
 
     private val model: DivisionListViewModel by activityViewModels()
+    private val modelSelect: SharedDivisionViewModel by activityViewModels()
     private var adapter: DivisionsListAdapter? = null
 
     override fun onCreateView(
@@ -47,7 +51,7 @@ class DivisionListFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         binding.recyclerView.layoutManager = LinearLayoutManager(activity?.applicationContext)
-        adapter = DivisionsListAdapter(::deleteDivision)
+        adapter = DivisionsListAdapter(::selectDivision)
         binding.recyclerView.adapter = adapter
         binding.buttonAdd.setOnClickListener {
             insertDivisionByDialog()
@@ -101,10 +105,32 @@ class DivisionListFragment : Fragment() {
                 }
             }
         }
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                modelSelect.uiEvents.collect { uiEvent ->
+                    when (uiEvent) {
+                        is EditDivisionUiEvent.Deleted -> {
+                            Snackbar.make(
+                                binding.recyclerView,
+                                resources.getString(R.string.division_deleted, uiEvent.division),
+                                Snackbar.LENGTH_LONG
+                            )
+                                .setAction(R.string.undo) {
+                                    model.onEvent(DivisionListEvent.InsertDivision(uiEvent.division))
+                                }
+                                .show()
+                        }
+                        else -> {}
+                    }
+                }
+            }
+        }
     }
 
-    private fun deleteDivision(division: Division){
-        model.onEvent(DivisionListEvent.DeleteDivision(division))
+    private fun selectDivision(division: Division){
+        modelSelect.onEvent(DivisionEditEvent.Select(division))
+        val action = DivisionListFragmentDirections.actionDivisionListFragmentToEditDivisionFragment()
+        findNavController().navigate(action)
     }
 
     @SuppressLint("CheckResult")
