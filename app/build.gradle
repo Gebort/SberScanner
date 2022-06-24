@@ -64,8 +64,12 @@ dependencies {
     implementation 'com.afollestad.material-dialogs:core:3.3.0'
     implementation 'com.afollestad.material-dialogs:input:3.3.0'
 
+    //CameraX
     implementation "androidx.camera:camera-camera2:${camerax_version}"
     implementation "androidx.camera:camera-lifecycle:${camerax_version}"
     implementation "androidx.camera:camera-view:${camerax_view_version}"
     implementation "com.google.android.gms:play-services-mlkit-barcode-scanning:${mlkit_version}"
+
+    //QRCode generator
+    implementation 'com.google.zxing:core:3.4.0'
 }

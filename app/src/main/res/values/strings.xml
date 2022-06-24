@@ -13,7 +13,7 @@
     <string name="start_scan">Start scanning</string>
     <string name="total_divisions">%d divisions</string>
     <string name="out_of_divisions">%d out of %d</string>
-    <string name="provide_camera">Please, provide the camera permission</string>
+    <string name="provide_permissions">Please, provide the permission</string>
     <string name="division_checked">%s - checked</string>
     <string name="place_code_inside">Place the code inside</string>
     <string name="export">Export</string>
@@ -21,4 +21,9 @@
     <string name="division_not_selected">Division not selected</string>
     <string name="delete_division">Delete - %s?</string>
     <string name="update">Update</string>
+    <string name="code_saved">Code was saved locally</string>
+    <string name="code_not_saved">Error happened</string>
+    <string name="share">Share</string>
+    <string name="share_image">Share the code</string>
+
 </resources>

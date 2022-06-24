@@ -12,7 +12,7 @@
     <string name="error_happened">Ошибка. Проверье интернет соединение</string>
     <string name="place_code_inside">Наведите на код</string>
     <string name="division_checked">Отмечено - %s</string>
-    <string name="provide_camera">Предоставьте разрешение на управление камерой</string>
+    <string name="provide_permissions">Пожалуйста, предоставьте разрешения</string>
     <string name="out_of_divisions">%d из %d</string>
     <string name="total_divisions">%d подразделений</string>
     <string name="start_scan">Начать сканирование</string>
@@ -22,7 +22,10 @@
     <string name="division_not_selected">Подразделение не выбрано</string>
     <string name="delete_division">Удалить -  %s?</string>
     <string name="update">Изменить</string>
-
+    <string name="code_saved">Код сохранен локально</string>
+    <string name="code_not_saved">Произошла ошибка</string>
+    <string name="share">Поделиться</string>
+    <string name="share_image">Поделиться кодом</string>
 
 
 </resources>

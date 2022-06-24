@@ -92,7 +92,9 @@ class ScannerXCamera: Scanner {
                                     // `rawValue` is the decoded value of the barcode
                                     barcode?.rawValue?.let { value ->
                                         // update our textView to show the decoded value
-                                        trySend(ScanResult(value))
+                                        val re = Regex("[^A-Za-z0-9 ]")
+                                        val res = re.replace(value, "")
+                                        trySend(ScanResult(res))
                                     }
                                 }
                                 .addOnFailureListener {
