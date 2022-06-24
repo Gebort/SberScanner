@@ -178,7 +178,7 @@ class EditDivisionFragment : Fragment() {
                 is Reaction.Success -> {
                     Snackbar.make(
                         binding.textName,
-                        R.string.code_saved,
+                        resources.getString(R.string.code_saved, reaction.data),
                         Snackbar.LENGTH_SHORT
                     )
                         .show()

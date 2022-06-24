@@ -1,18 +1,16 @@
 package com.example.sberqrscanner.domain.use_case
 
 import android.app.Activity
-import android.content.Intent
-import android.graphics.Bitmap
-import com.example.sberqrscanner.R
+import android.graphics.pdf.PdfDocument
 import com.example.sberqrscanner.data.util.Reaction
 import com.example.sberqrscanner.domain.external_files.ExternalStorageWorker
 
-class ShareCode(
+class SharePdf(
     private val externalStorageWorker: ExternalStorageWorker
 ) {
 
-    operator fun invoke(bitmap: Bitmap, activity: Activity): Reaction<Unit> {
-        return externalStorageWorker.shareBitmap(bitmap, activity)
+    operator fun invoke(pdf: PdfDocument, activity: Activity): Reaction<Unit> {
+        return externalStorageWorker.sharePdf(pdf, activity)
 
     }
 

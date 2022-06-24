@@ -4,22 +4,14 @@ import android.app.Activity
 import android.content.Intent
 import android.graphics.Bitmap
 import com.example.sberqrscanner.data.util.Reaction
+import com.example.sberqrscanner.domain.external_files.ExternalStorageWorker
 
 class ExportCode(
-    private val getBitmapUri: GetBitmapUri
+    private val externalStorageWorker: ExternalStorageWorker
 ) {
 
-    operator fun invoke(code: Bitmap, activity: Activity): Reaction<Unit> {
-        return when (val reaction = getBitmapUri(code, activity)) {
-            is Reaction.Success -> {
-                val uri = reaction.data
-                activity.sendBroadcast(Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, uri))
-                Reaction.Success(Unit)
-            }
-            is Reaction.Error -> {
-                reaction
-            }
-        }
+    operator fun invoke(code: Bitmap, activity: Activity): Reaction<String?> {
+        return externalStorageWorker.exportBitmap(code, activity)
     }
 
 }

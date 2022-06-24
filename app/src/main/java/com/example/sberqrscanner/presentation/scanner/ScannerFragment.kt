@@ -17,11 +17,13 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.sberqrscanner.MyApp
 import com.example.sberqrscanner.R
+import com.example.sberqrscanner.data.util.Reaction
 import com.example.sberqrscanner.databinding.FragmentScannerBinding
 import com.example.sberqrscanner.domain.model.Division
 import com.example.sberqrscanner.presentation.scanner.adapter.DivisionCheckListAdapter
 import com.example.sberqrscanner.presentation.scanner.adapter.DivisionItem
 import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
@@ -30,14 +32,15 @@ private const val TAG = "SCANNER"
 
 class ScannerFragment : Fragment() {
 
+    private val bindCamera = MyApp.instance!!.bindCamera
+    private val sharePdf = MyApp.instance!!.sharePdf
+    private val generateReport = MyApp.instance!!.generateReport
 
     private var _binding: FragmentScannerBinding? = null
     private val binding get() = _binding!!
 
     private val model: DivisionCheckViewModel by activityViewModels()
     private var adapter: DivisionCheckListAdapter? = null
-
-    private val bindCamera = MyApp.instance!!.bindCamera
 
     private val bottomPeekHeight = 325
 
@@ -63,6 +66,20 @@ class ScannerFragment : Fragment() {
         binding.buttonEdit.setOnClickListener {
             val action = ScannerFragmentDirections.actionScannerFragmentToDivisionListFragment()
             findNavController().navigate(action)
+        }
+        binding.buttonMakeReport.setOnClickListener {
+            val report = generateReport(model.state.value.divisions)
+            when (sharePdf(report, requireActivity())){
+                is Reaction.Success -> {}
+                is Reaction.Error -> {
+                    Snackbar.make(
+                        binding.previewView,
+                        R.string.share_failed,
+                        Snackbar.LENGTH_SHORT
+                    )
+                        .show()
+                }
+            }
         }
 
         lifecycleScope.launch {

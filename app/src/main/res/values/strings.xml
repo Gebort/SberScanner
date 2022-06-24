@@ -21,10 +21,12 @@
     <string name="division_not_selected">Division not selected</string>
     <string name="delete_division">Delete - %s?</string>
     <string name="update">Update</string>
-    <string name="code_saved">Code was saved locally</string>
+    <string name="code_saved">Code was saved: %s</string>
     <string name="code_not_saved">Error happened</string>
     <string name="share">Share</string>
     <string name="share_image">Share the code</string>
     <string name="make_report">Create the report</string>
+    <string name="share_report">Share the report</string>
+    <string name="share_failed">Failed to share</string>
 
 </resources>
