@@ -5,7 +5,6 @@ import androidx.lifecycle.viewModelScope
 import com.example.sberqrscanner.MyApp
 import com.example.sberqrscanner.data.util.Reaction
 import com.example.sberqrscanner.domain.model.Division
-import com.example.sberqrscanner.domain.use_case.DivisionsUseCases
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.*
@@ -13,7 +12,8 @@ import kotlinx.coroutines.launch
 
 class DivisionListViewModel: ViewModel() {
 
-    private val divisionUseCases = MyApp.instance!!.divisionUseCases
+    private val insertDivision = MyApp.instance!!.insertDivision
+    private val getDivisions = MyApp.instance!!.getDivisions
 
     private var _state = MutableStateFlow(DivisionListState())
     val state get() = _state.asStateFlow()
@@ -30,17 +30,17 @@ class DivisionListViewModel: ViewModel() {
     fun onEvent(event: DivisionListEvent){
         when(event){
             is DivisionListEvent.InsertDivision -> {
-                insertDivision(event.division)
+                newDivision(event.name, event.id)
             }
         }
     }
 
-    private fun insertDivision(division: Division) {
+    private fun newDivision(name: String, id: String?) {
         viewModelScope.launch {
             _state.value = state.value.copy(
                 loading = true
             )
-            when (val res = divisionUseCases.insertDivision(division)) {
+            when (val res = insertDivision(name, id)) {
                 is Reaction.Error -> {
                     _uiEvents.trySend(
                         DivisionListUiEvent.Error(res.error)
@@ -58,7 +58,7 @@ class DivisionListViewModel: ViewModel() {
 
     private fun loadDivisions() {
         getDivisionsJob?.cancel()
-        getDivisionsJob = divisionUseCases.getDivisions()
+        getDivisionsJob = getDivisions()
             .onEach { reaction ->
                 when(reaction){
                     is Reaction.Success -> {
@@ -68,7 +68,10 @@ class DivisionListViewModel: ViewModel() {
                         )
                     }
                     is Reaction.Error -> {
-                        //TODO показ ошибки
+                        _uiEvents.trySend(DivisionListUiEvent.Error(reaction.error))
+                        _state.value = state.value.copy(
+                            loading = false
+                        )
                     }
 
                 }

@@ -29,8 +29,8 @@ class DivisionCheckViewModel: ViewModel() {
 
     fun onEvent(event: DivisionCheckEvent) {
         when (event) {
-            is DivisionCheckEvent.checkDivision -> {
-                val item = _state.value.divisions.find { it.division == event.division }
+            is DivisionCheckEvent.CheckDivision -> {
+                val item = _state.value.divisions.find { it.division.id == event.scanResult.id }
                 item?.let {
                     if (!item.checked) {
                         val newList = state.value.divisions.toMutableList()
@@ -41,7 +41,7 @@ class DivisionCheckViewModel: ViewModel() {
                             divisions = newList
                         )
                         _uiEvents.trySend(
-                            DivisionCheckUiEvent.DivisionChecked(event.division)
+                            DivisionCheckUiEvent.DivisionChecked(newItem.division)
                         )
                     }
                 }

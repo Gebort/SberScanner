@@ -10,6 +10,7 @@ import kotlinx.coroutines.launch
 class SharedDivisionViewModel: ViewModel() {
 
     private val deleteDivision = MyApp.instance!!.deleteDivision
+    private val updateDivision = MyApp.instance!!.updateDivision
 
     private val _state = MutableStateFlow(EditDivisionState())
     val state = _state.asStateFlow()
@@ -45,7 +46,24 @@ class SharedDivisionViewModel: ViewModel() {
                 }
             }
             is DivisionEditEvent.UpdateSelected -> {
-                //TODO update
+                state.value.selected?.let {
+                    viewModelScope.launch {
+                        _state.update { it.copy(loading = true) }
+                        when (val res = updateDivision(it.copy(name = event.name))) {
+                            is Reaction.Success -> {
+                                _uiEvents.emit(
+                                    EditDivisionUiEvent.Changed(it)
+                                )
+                            }
+                            is Reaction.Error -> {
+                                _uiEvents.emit(
+                                    EditDivisionUiEvent.Error(res.error)
+                                )
+                            }
+                        }
+                        _state.update { it.copy(loading = false, selected = null) }
+                    }
+                }
             }
         }
     }

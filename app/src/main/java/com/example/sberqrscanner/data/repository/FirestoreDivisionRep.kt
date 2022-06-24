@@ -12,9 +12,10 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
 import java.lang.Exception
 
-class FirestoreDivisionRep: DivisionRepository {
+private const val DIVISIONS = "divisions"
+private const val NAME = "name"
 
-    private val DIVISIONS = "divisions"
+class FirestoreDivisionRep: DivisionRepository {
 
     private var getDivisionsFlow: Flow<Reaction<List<Division>>>? = null
 
@@ -30,14 +31,22 @@ class FirestoreDivisionRep: DivisionRepository {
                     if (error != null) {
                         trySend(Reaction.Error(error))
                     } else {
-                        val list = value?.documents?.map { docSnap ->
-                            Division(docSnap.id)
+                        val list = value?.documents?.
+                        filterNot {
+                            it.getString("name") == null
+                        }?.
+                        map{ docSnap ->
+                            val id = docSnap.id
+                            val name = docSnap.getString("name")
+                            Division(
+                                id = id,
+                                name = name!!
+                            )
                         } ?: listOf()
                         trySend(Reaction.Success(list))
                     }
 
                 }
-
                 awaitClose {
                     // Dismisses real time listener
                     subscription.remove()
@@ -47,12 +56,33 @@ class FirestoreDivisionRep: DivisionRepository {
         }
     }
 
-    override suspend fun insertDivision(division: Division): Reaction<Unit> {
+    override suspend fun insertDivision(name: String, id: String?): Reaction<Unit> {
+        val db = Firebase.firestore
+        return try {
+            if (id == null){
+                db.collection(DIVISIONS)
+                    .add(hashMapOf(Pair(NAME, name)))
+                    .await()
+            }
+            else {
+                db.collection(DIVISIONS)
+                    .document(id)
+                    .set(hashMapOf(Pair(NAME, name)))
+                    .await()
+            }
+
+            Reaction.Success(Unit)
+        } catch (e: Exception){
+            Reaction.Error(e)
+        }
+    }
+
+    override suspend fun updateDivision(division: Division): Reaction<Unit> {
         val db = Firebase.firestore
         return try {
             db.collection(DIVISIONS)
-                .document(division.name)
-                .set(hashMapOf<Nothing, Nothing>())
+                .document(division.id)
+                .set(hashMapOf(Pair(NAME, division.name)))
                 .await()
             Reaction.Success(Unit)
         } catch (e: Exception){
@@ -64,7 +94,7 @@ class FirestoreDivisionRep: DivisionRepository {
         val db = Firebase.firestore
         return try {
             db.collection(DIVISIONS)
-                .document(division.name)
+                .document(division.id)
                 .delete()
                 .await()
             Reaction.Success(Unit)

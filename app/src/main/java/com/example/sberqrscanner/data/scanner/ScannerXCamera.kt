@@ -92,7 +92,7 @@ class ScannerXCamera: Scanner {
                                     // `rawValue` is the decoded value of the barcode
                                     barcode?.rawValue?.let { value ->
                                         // update our textView to show the decoded value
-                                        trySend(ScanResult(Division(value)))
+                                        trySend(ScanResult(value))
                                     }
                                 }
                                 .addOnFailureListener {

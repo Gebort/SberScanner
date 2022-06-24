@@ -1,7 +1,5 @@
 package com.example.sberqrscanner.presentation.division_list
 
-import com.example.sberqrscanner.domain.model.Division
-
 sealed class DivisionListEvent{
-    class InsertDivision(val division: Division): DivisionListEvent()
+    class InsertDivision(val name: String, val id: String? = null): DivisionListEvent()
 }

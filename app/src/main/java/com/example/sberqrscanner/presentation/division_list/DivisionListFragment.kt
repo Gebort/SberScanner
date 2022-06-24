@@ -97,7 +97,10 @@ class DivisionListFragment : Fragment() {
                                 Snackbar.LENGTH_LONG
                             )
                                 .setAction(R.string.undo) {
-                                    model.onEvent(DivisionListEvent.InsertDivision(event.division))
+                                    model.onEvent(DivisionListEvent.InsertDivision(
+                                        name = event.division.name,
+                                        id = event.division.id
+                                    ))
                                 }
                                 .show()
                         }
@@ -116,7 +119,10 @@ class DivisionListFragment : Fragment() {
                                 Snackbar.LENGTH_LONG
                             )
                                 .setAction(R.string.undo) {
-                                    model.onEvent(DivisionListEvent.InsertDivision(uiEvent.division))
+                                    model.onEvent(DivisionListEvent.InsertDivision(
+                                        name = uiEvent.division.name,
+                                        id = uiEvent.division.id
+                                    ))
                                 }
                                 .show()
                         }
@@ -138,7 +144,7 @@ class DivisionListFragment : Fragment() {
         MaterialDialog(requireContext()).show {
             input { _, text ->
                 model.onEvent(DivisionListEvent.InsertDivision(
-                    Division(text.toString())
+                    text.toString()
                 ))
             }
             title(R.string.input_division_name)

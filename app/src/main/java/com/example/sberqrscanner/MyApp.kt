@@ -11,11 +11,7 @@ class MyApp: Application() {
     val getDivisions = GetDivisions(divisionsRep)
     val insertDivision = InsertDivision(divisionsRep)
     val deleteDivision = DeleteDivision(divisionsRep)
-    val divisionUseCases = DivisionsUseCases(
-        deleteDivision,
-        insertDivision,
-        getDivisions
-    )
+    val updateDivision = UpdateDivision(divisionsRep)
     val scanner = ScannerXCamera()
     val bindCamera = BindCamera(scanner)
 

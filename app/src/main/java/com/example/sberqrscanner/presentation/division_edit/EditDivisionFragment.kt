@@ -82,6 +82,8 @@ class EditDivisionFragment : Fragment() {
                             )
                                 .show()
                         }
+                        is EditDivisionUiEvent.Changed -> {
+                        }
                 }
                 }
             }
@@ -107,9 +109,7 @@ class EditDivisionFragment : Fragment() {
             MaterialDialog(requireContext(), ).show {
                 input(prefill = it.name) { _, text ->
                     model.onEvent(DivisionEditEvent.UpdateSelected(
-                        it.copy(
                             name = text.toString()
-                        )
                     ))
                 }
                 title(R.string.input_division_name)

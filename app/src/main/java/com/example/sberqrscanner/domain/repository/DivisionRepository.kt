@@ -8,7 +8,9 @@ interface DivisionRepository {
 
     fun getDivisions(): Flow<Reaction<List<Division>>>
 
-    suspend fun insertDivision(division: Division): Reaction<Unit>
+    suspend fun insertDivision(name: String, id: String? = null): Reaction<Unit>
+
+    suspend fun updateDivision(division: Division): Reaction<Unit>
 
     suspend fun deleteDivision(division: Division): Reaction<Unit>
 

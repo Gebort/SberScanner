@@ -6,5 +6,5 @@ import com.example.sberqrscanner.presentation.division_list.DivisionListEvent
 sealed class DivisionEditEvent{
     class Select(val division: Division?): DivisionEditEvent()
     object DeleteSelected: DivisionEditEvent()
-    class UpdateSelected(division: Division): DivisionEditEvent()
+    class UpdateSelected(val name: String): DivisionEditEvent()
 }

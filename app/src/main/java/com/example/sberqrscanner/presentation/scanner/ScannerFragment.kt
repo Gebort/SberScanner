@@ -72,7 +72,7 @@ class ScannerFragment : Fragment() {
                     requireContext(),
                     binding.previewView
                 ).collect { scanResult ->
-                    model.onEvent(DivisionCheckEvent.checkDivision(scanResult.division))
+                    model.onEvent(DivisionCheckEvent.CheckDivision(scanResult))
                 }
             }
         }
