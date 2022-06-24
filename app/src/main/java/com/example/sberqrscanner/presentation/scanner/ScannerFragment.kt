@@ -39,7 +39,7 @@ class ScannerFragment : Fragment() {
 
     private val bindCamera = MyApp.instance!!.bindCamera
 
-    private val bottomPeekHeight = 225
+    private val bottomPeekHeight = 325
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

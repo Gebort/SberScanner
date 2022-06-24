@@ -17,7 +17,7 @@ class MyApp: Application() {
     val bindCamera = BindCamera(scanner)
     val codeGenerator = QRCodeGenerator()
     val generateCode = GenerateCode(codeGenerator)
-    val saveBitmap = SaveBitmap()
+    val saveBitmap = GetBitmapUri()
     val exportCode = ExportCode(saveBitmap)
     val shareCode = ShareCode(saveBitmap)
     val checkPermission = CheckPermission()

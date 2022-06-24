@@ -26,6 +26,6 @@
     <string name="code_not_saved">Произошла ошибка</string>
     <string name="share">Поделиться</string>
     <string name="share_image">Поделиться кодом</string>
-
+    <string name="make_report">Создать отчет</string>
 
 </resources>

@@ -25,5 +25,6 @@
     <string name="code_not_saved">Error happened</string>
     <string name="share">Share</string>
     <string name="share_image">Share the code</string>
+    <string name="make_report">Create the report</string>
 
 </resources>

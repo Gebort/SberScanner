@@ -88,6 +88,7 @@ class EditDivisionFragment : Fragment() {
                         binding.buttonDownload.isEnabled = !state.loading
                         binding.buttonDelete.isEnabled = !state.loading
                         binding.buttonEdit.isEnabled = !state.loading
+                        binding.buttonShare.isEnabled = !state.loading
 
                         oldState = state
                     }

@@ -10,9 +10,9 @@ import java.io.File
 import java.io.FileOutputStream
 
 
-class SaveBitmap {
+class GetBitmapUri {
 
-    operator fun invoke(bitmap: Bitmap): Reaction<Uri> {
+    operator fun invoke(bitmap: Bitmap, activity: Activity): Reaction<Uri> {
         try {
             val fileName = System.currentTimeMillis().toString() + ".jpg"
             val storePath = Environment.getExternalStorageDirectory().absolutePath
@@ -25,7 +25,12 @@ class SaveBitmap {
             val isSuccess = bitmap.compress(Bitmap.CompressFormat.JPEG, 70, fileOutputStream)
             fileOutputStream.flush()
             fileOutputStream.close()
-            val uri = Uri.fromFile(file)
+
+            val uri = FileProvider.getUriForFile(
+                activity,
+                "com.example.sberqrscanner.provider",  //(use your app signature + ".provider" )
+                file
+            )
 
             return if (isSuccess){
                 Reaction.Success(uri)

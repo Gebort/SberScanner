@@ -7,11 +7,11 @@ import com.example.sberqrscanner.R
 import com.example.sberqrscanner.data.util.Reaction
 
 class ShareCode(
-    private val saveBitmap: SaveBitmap
+    private val getBitmapUri: GetBitmapUri
 ) {
 
     operator fun invoke(bitmap: Bitmap, activity: Activity): Reaction<Unit> {
-        return when (val reaction = saveBitmap(bitmap)){
+        return when (val reaction = getBitmapUri(bitmap, activity)){
             is Reaction.Success -> {
                 val uri = reaction.data
                 val intent = Intent(Intent.ACTION_SEND)
