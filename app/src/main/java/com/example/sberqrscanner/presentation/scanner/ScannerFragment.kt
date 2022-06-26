@@ -68,7 +68,7 @@ class ScannerFragment : Fragment() {
             findNavController().navigate(action)
         }
         binding.buttonMakeReport.setOnClickListener {
-            val report = generateReport(model.state.value.divisions)
+            val report = generateReport(model.state.value.divisions, requireContext())
             when (sharePdf(report, requireActivity())){
                 is Reaction.Success -> {}
                 is Reaction.Error -> {

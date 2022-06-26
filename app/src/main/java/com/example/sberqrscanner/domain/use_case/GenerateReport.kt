@@ -1,10 +1,12 @@
 package com.example.sberqrscanner.domain.use_case
 
+import android.content.Context
 import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.Typeface
 import android.graphics.pdf.PdfDocument
 import android.graphics.pdf.PdfDocument.PageInfo
+import com.example.sberqrscanner.R
 import com.example.sberqrscanner.data.util.getCurrentDate
 import com.example.sberqrscanner.data.util.toString
 import com.example.sberqrscanner.presentation.scanner.adapter.DivisionItem
@@ -14,7 +16,7 @@ private const val PAGE_WIDTH = 792
 
 class GenerateReport {
 
-    operator fun invoke(divisions: List<DivisionItem>): PdfDocument {
+    operator fun invoke(divisions: List<DivisionItem>, context: Context): PdfDocument {
         val document = PdfDocument()
         val pageInfo = PageInfo.Builder(PAGE_WIDTH, PAGE_HEIGHT, 1).create()
         val page: PdfDocument.Page = document.startPage(pageInfo)
@@ -36,9 +38,14 @@ class GenerateReport {
         val absent = divisions.filter { !it.checked }
         val absentCount = absent.count()
 
-        canvas.drawText("Отсутствует подразделений - $absentCount", 30F, 70F, title)
-        canvas.drawText("Всего подразделений - $totalCount", 30F, 90F, title)
-        canvas.drawText("Отсутствующие:", 30F, 120F, title)
+        val absentStr = context.resources.getString(R.string.report_absent, absentCount)
+        val totalStr = context.resources.getString(R.string.report_total, totalCount)
+        val absentListStr = context.resources.getString(R.string.report_absent_list)
+
+
+        canvas.drawText(absentStr, 30F, 70F, title)
+        canvas.drawText(totalStr, 30F, 90F, title)
+        canvas.drawText(absentListStr, 30F, 120F, title)
 
         for (i in 1..absentCount) {
             if (120F+(i*20F)+40 < PAGE_HEIGHT) {
@@ -50,8 +57,12 @@ class GenerateReport {
                 )
             }
             else {
+                val moreStr = context.resources.getString(
+                    R.string.report_absent_more,
+                    absentCount-i+1
+                )
                 canvas.drawText(
-                    "ещё ${absentCount-i+1} подразделения...",
+                    moreStr,
                     60F,
                     120F + (i * 20F),
                     title

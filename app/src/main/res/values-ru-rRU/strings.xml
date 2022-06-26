@@ -29,6 +29,7 @@
     <string name="make_report">Создать отчет</string>
     <string name="share_report">Отправить отчет</string>
     <string name="share_failed">Не удалось отправить</string>
+    <string name="date_format">dd.MM.yyyy HH:mm</string>
 
 
 </resources>

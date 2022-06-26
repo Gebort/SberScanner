@@ -33,7 +33,6 @@ class ExternalWorkerImpl: ExternalStorageWorker {
                     throw Exception("No realisation for this type")
                 }
             }
-            if (fileName != null) {
                 val storePath = Environment.getExternalStorageDirectory().absolutePath
                 val appDir = File(storePath)
                 if (!appDir.exists()) {
@@ -67,10 +66,6 @@ class ExternalWorkerImpl: ExternalStorageWorker {
                 } else {
                     Reaction.Error(Exception("Unknown exception"))
                 }
-            }
-            else {
-                return Reaction.Error(Exception("Unknown type"))
-            }
         } catch (e: Exception) {
             return Reaction.Error(e)
         }
