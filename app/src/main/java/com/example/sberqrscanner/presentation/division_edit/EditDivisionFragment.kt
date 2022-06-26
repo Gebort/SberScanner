@@ -46,7 +46,7 @@ class EditDivisionFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = FragmentEditDivisionBinding.inflate(inflater, container, false)
         val view = binding.root
 
@@ -154,26 +154,32 @@ class EditDivisionFragment : Fragment() {
         binding.buttonDownload.isEnabled = true
     }
 
-    private fun sendCode(code: Bitmap){
-        when (shareCode(code, requireActivity())) {
-            is Reaction.Success -> {}
-            is Reaction.Error -> {
-                Snackbar.make(
-                    binding.textName,
-                    R.string.code_not_saved,
-                    Snackbar.LENGTH_SHORT
-                )
-                    .show()
+    private fun sendCode(code: Bitmap) {
+
+        requestAndDo(
+            Manifest.permission.WRITE_EXTERNAL_STORAGE,
+            REQUEST_WRITE_PERMISSION_CODE,
+        ) {
+            when (shareCode(code, requireActivity())) {
+                is Reaction.Success -> {}
+                is Reaction.Error -> {
+                    Snackbar.make(
+                        binding.textName,
+                        R.string.code_not_saved,
+                        Snackbar.LENGTH_SHORT
+                    )
+                        .show()
+                }
             }
         }
     }
 
     private fun downloadCode(code: Bitmap){
-        if (checkPermission(
+
+        requestAndDo(
             Manifest.permission.WRITE_EXTERNAL_STORAGE,
             REQUEST_WRITE_PERMISSION_CODE,
-            requireActivity()
-        )){
+        ){
             when (val reaction = exportCode(code, requireActivity())) {
                 is Reaction.Success -> {
                     Snackbar.make(
@@ -193,10 +199,20 @@ class EditDivisionFragment : Fragment() {
                 }
             }
         }
+    }
+
+    private fun requestAndDo(permission: String, code: Int, action: () -> Unit) {
+        if (checkPermission(
+                permission,
+                code,
+                requireActivity()
+            )){
+            action()
+        }
         else {
             requestPermission(
-                Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                REQUEST_WRITE_PERMISSION_CODE,
+                permission,
+                code,
                 requireActivity()
             )
         }

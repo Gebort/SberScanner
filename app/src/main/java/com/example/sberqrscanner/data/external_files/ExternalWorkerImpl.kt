@@ -30,7 +30,7 @@ class ExternalWorkerImpl: ExternalStorageWorker {
                     "Report_${timeStr}.pdf"
                 }
                 else -> {
-                    null
+                    throw Exception("No realisation for this type")
                 }
             }
             if (fileName != null) {
@@ -50,7 +50,7 @@ class ExternalWorkerImpl: ExternalStorageWorker {
                         true
                     }
                     else -> {
-                        false
+                        throw Exception("No realisation for this type")
                     }
                 }
                 fileOutputStream.flush()
@@ -102,7 +102,7 @@ class ExternalWorkerImpl: ExternalStorageWorker {
                         "application/pdf"
                     }
                     else -> {
-                        null
+                        throw Exception("No realisation for this type")
                     }
                 }
                 val message = when (data) {
@@ -113,10 +113,10 @@ class ExternalWorkerImpl: ExternalStorageWorker {
                         R.string.share_report
                     }
                     else -> {
-                        null
+                        throw Exception("No realisation for this type")
                     }
                 }
-                if (intent.type != null && message != null) {
+                if (intent.type != null) {
                     intent.putExtra(Intent.EXTRA_STREAM, uri)
                     activity.startActivity(Intent.createChooser(intent, activity.getString(message)))
                     Reaction.Success(Unit)
