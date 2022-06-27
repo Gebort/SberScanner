@@ -29,7 +29,7 @@ class GenerateReport {
 
         title.textAlign = Paint.Align.CENTER
         title.textSize = 24F
-        val date = getCurrentDate().toString("dd.MM.yyyy HH:mm")
+        val date = getCurrentDate().toString(context.resources.getString(R.string.date_format))
         canvas.drawText("Отчет $date", PAGE_WIDTH/2F,30F , title)
 
         title.textAlign = Paint.Align.LEFT
