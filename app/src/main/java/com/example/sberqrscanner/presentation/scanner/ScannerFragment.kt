@@ -49,8 +49,6 @@ class ScannerFragment : Fragment() {
     private val model: DivisionCheckViewModel by activityViewModels()
     private var adapter: DivisionCheckListAdapter? = null
 
-    private val bottomPeekHeight = 325
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -59,7 +57,7 @@ class ScannerFragment : Fragment() {
         val view = binding.root
 
         BottomSheetBehavior.from(binding.bottomSheet).apply {
-            peekHeight = bottomPeekHeight
+         //   peekHeight = bottomPeekHeight
             this.state = BottomSheetBehavior.STATE_COLLAPSED
         }
 
