@@ -15,7 +15,7 @@ class BindCamera(
         lifecycleOwner: LifecycleOwner,
         context: Context,
         previewView: PreviewView
-    ): Flow<ScanResult> {
+    ): Flow<List<ScanResult>> {
         return scanner.bindCamera(lifecycleOwner, context, previewView)
     }
 

@@ -11,6 +11,6 @@ interface Scanner {
         lifecycleOwner: LifecycleOwner,
         context: Context,
         previewView: PreviewView
-    ): Flow<ScanResult>
+    ): Flow<List<ScanResult>>
 
 }

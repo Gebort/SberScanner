@@ -1,7 +1,6 @@
 package com.example.sberqrscanner.data.code_generator
 
 import android.graphics.Bitmap
-import android.graphics.Canvas
 import android.graphics.Color
 import android.net.Uri
 import com.example.sberqrscanner.domain.code_generator.CodeGenerator
@@ -14,8 +13,8 @@ import java.util.*
 
 private const val WIDTH_QR = 700
 private const val HEIGHT_QR = 700
-private const val WIDTH_128 = 700
-private const val HEIGHT_128 = 350
+private const val WIDTH_128 = 1800
+private const val HEIGHT_128 = 600
 
 class QRCodeGenerator: CodeGenerator {
 

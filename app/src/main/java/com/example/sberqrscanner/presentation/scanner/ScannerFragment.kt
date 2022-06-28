@@ -92,8 +92,8 @@ class ScannerFragment : Fragment() {
                         viewLifecycleOwner,
                         requireContext(),
                         binding.previewView
-                    ).collect { scanResult ->
-                        model.onEvent(DivisionCheckEvent.CheckDivision(scanResult))
+                    ).collect { scans ->
+                        model.onEvent(DivisionCheckEvent.CheckDivisions(scans))
                     }
             }
         }
@@ -139,7 +139,7 @@ class ScannerFragment : Fragment() {
     private fun sendReport(){
         if (
             checkRequestPerm(
-                Manifest.permission.MANAGE_EXTERNAL_STORAGE,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE,
                 REQUEST_STORAGE_PERMISSION_CODE,
                 requireActivity()
             )
@@ -190,7 +190,7 @@ class ScannerFragment : Fragment() {
                 isCheckedDefault = division.checked
             ) { checked ->
                 if (checked) {
-                    model.onEvent(DivisionCheckEvent.CheckDivision(ScanResult(division.id)))
+                    model.onEvent(DivisionCheckEvent.CheckDivisions(listOf(ScanResult(division.id))))
                 }
                 else {
                     model.onEvent(DivisionCheckEvent.UncheckDivision(division))
@@ -198,7 +198,6 @@ class ScannerFragment : Fragment() {
             }
             title(R.string.check_manual)
             positiveButton { R.string.confirm }
-            negativeButton { R.string.cancel }
         }
     }
 }

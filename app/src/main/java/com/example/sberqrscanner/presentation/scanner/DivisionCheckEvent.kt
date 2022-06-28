@@ -4,6 +4,6 @@ import com.example.sberqrscanner.domain.model.Division
 import com.example.sberqrscanner.domain.scanner.ScanResult
 
 sealed class DivisionCheckEvent {
-    class CheckDivision(val scanResult: ScanResult): DivisionCheckEvent()
+    class CheckDivisions(val scans: List<ScanResult>): DivisionCheckEvent()
     class UncheckDivision(val division: Division): DivisionCheckEvent()
 }
