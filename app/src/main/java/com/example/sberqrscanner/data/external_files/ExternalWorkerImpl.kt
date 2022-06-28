@@ -33,8 +33,8 @@ class ExternalWorkerImpl: ExternalStorageWorker {
                 }
             }
 
-               val storePath = Environment.getExternalStorageDirectory().absolutePath
-                val appDir = File(storePath)
+            val storePath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).absolutePath
+            val appDir = File(storePath)
                 if (!appDir.exists()) {
                     appDir.mkdir()
                 }
