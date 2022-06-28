@@ -14,16 +14,22 @@ class MyApp: Application() {
     val insertDivision = InsertDivision(divisionsRep)
     val deleteDivision = DeleteDivision(divisionsRep)
     val updateDivision = UpdateDivision(divisionsRep)
+    val dropChecks = DropChecks(divisionsRep)
+
     val scanner = ScannerXCamera()
     val bindCamera = BindCamera(scanner)
+
     private val codeGenerator = QRCodeGenerator()
     val generateQRCode = GenerateQRCode(codeGenerator)
     val generateCode128 = GenerateCode128(codeGenerator)
+
     private val externalStorageWorker = ExternalWorkerImpl()
     val exportCode = ExportCode(externalStorageWorker)
     val shareCode = ShareCode(externalStorageWorker)
     val sharePdf = SharePdf(externalStorageWorker)
+
     val generateReport = GenerateReport()
+
     val checkPermission = CheckPermission()
     val checkRequestPerm = CheckRequestPerm(checkPermission)
 

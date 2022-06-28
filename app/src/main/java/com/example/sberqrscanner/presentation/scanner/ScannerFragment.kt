@@ -41,6 +41,7 @@ class ScannerFragment : Fragment() {
     private val sharePdf = MyApp.instance!!.sharePdf
     private val generateReport = MyApp.instance!!.generateReport
     private val checkRequestPerm = MyApp.instance!!.checkRequestPerm
+    private val dropChecks = MyApp.instance!!.dropChecks
 
     private var _binding: FragmentScannerBinding? = null
     private val binding get() = _binding!!
@@ -75,6 +76,9 @@ class ScannerFragment : Fragment() {
         }
         binding.buttonMakeReport.setOnClickListener {
             sendReport()
+        }
+        binding.buttonRefresh.setOnClickListener {
+            clearChecks()
         }
 
         lifecycleScope.launch {
@@ -155,6 +159,29 @@ class ScannerFragment : Fragment() {
         }
     }
 
+    private fun clearChecks(){
+
+        MaterialDialog(requireContext()).show {
+            positiveButton(R.string.confirm) { dialog ->
+                lifecycleScope.launch {
+                    when(dropChecks(model.state.value.divisions.filter { it.checked })) {
+                        is Reaction.Success -> {}
+                        is Reaction.Error -> {
+                            Snackbar.make(
+                                binding.previewView,
+                                R.string.error_happened,
+                                Snackbar.LENGTH_SHORT
+                            )
+                                .show()
+                        }
+                    }
+                }
+            }
+            negativeButton(R.string.cancel) {}
+            title(R.string.drop_checks)
+        }
+    }
+
     @SuppressLint("CheckResult")
     fun checkDialog(division: Division){
         MaterialDialog(requireContext()).show {
@@ -174,23 +201,4 @@ class ScannerFragment : Fragment() {
             negativeButton { R.string.cancel }
         }
     }
-
-//    companion object {
-//        /**
-//         * Use this factory method to create a new instance of
-//         * this fragment using the provided parameters.
-//         *
-//         * @param param1 Parameter 1.
-//         * @param param2 Parameter 2.
-//         * @return A new instance of fragment ScannerFragment.
-//         */
-//        @JvmStatic
-//        fun newInstance(param1: String, param2: String) =
-//            ScannerFragment().apply {
-//                arguments = Bundle().apply {
-//                    putString(ARG_PARAM1, param1)
-//                    putString(ARG_PARAM2, param2)
-//                }
-//            }
-//    }
 }

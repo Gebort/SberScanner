@@ -14,6 +14,6 @@ interface DivisionRepository {
 
     suspend fun deleteDivision(division: Division): Reaction<Unit>
 
-    suspend fun dropChecks(): Reaction<Unit>
+    suspend fun dropChecks(divisions: List<Division>): Reaction<Unit>
 
 }
