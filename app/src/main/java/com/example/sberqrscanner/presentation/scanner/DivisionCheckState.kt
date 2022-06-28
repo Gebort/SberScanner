@@ -1,8 +1,8 @@
 package com.example.sberqrscanner.presentation.scanner
 
-import com.example.sberqrscanner.presentation.scanner.adapter.DivisionItem
+import com.example.sberqrscanner.domain.model.Division
 
 data class DivisionCheckState(
-    val divisions: List<DivisionItem> = listOf()
+    val divisions: List<Division> = listOf()
 ) {
 }

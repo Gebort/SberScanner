@@ -1,24 +1,11 @@
 package com.example.sberqrscanner.presentation
 
-import android.Manifest
-import android.content.pm.PackageManager
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.Gravity
 import android.view.WindowManager
-import android.widget.Toast
-import androidx.core.app.ActivityCompat
-import com.example.sberqrscanner.MyApp
+import androidx.appcompat.app.AppCompatActivity
 import com.example.sberqrscanner.R
 
-private const val CAMERA_PERMISSION_REQUEST_CODE = 1
-//private const val STORAGE_PERMISSION_REQUEST_CODE = 2
-//private const val REQUEST_PERMISSIONS_CODE = 3
-
-
 class MainActivity : AppCompatActivity() {
-
-    private val requestPermission = MyApp.instance!!.requestPermission
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,11 +17,6 @@ class MainActivity : AppCompatActivity() {
 
         setContentView(R.layout.activity_main)
 
-        requestPermission(
-            Manifest.permission.CAMERA,
-            CAMERA_PERMISSION_REQUEST_CODE,
-            this
-        )
   //      requestCameraPermission()
         //requestStoragePermission()
 //        if (!hasCameraPermission())

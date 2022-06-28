@@ -5,6 +5,11 @@ import android.graphics.Bitmap
 
 interface CodeGenerator {
 
-    fun generateCode(data: String): Bitmap
+    suspend fun generateCode(option: Option, data: String): Bitmap
+
+    sealed class Option {
+        object QRCode: Option()
+        object Code128: Option()
+    }
 
 }

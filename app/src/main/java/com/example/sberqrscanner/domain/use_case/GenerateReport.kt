@@ -9,14 +9,14 @@ import android.graphics.pdf.PdfDocument.PageInfo
 import com.example.sberqrscanner.R
 import com.example.sberqrscanner.data.util.getCurrentDate
 import com.example.sberqrscanner.data.util.toString
-import com.example.sberqrscanner.presentation.scanner.adapter.DivisionItem
+import com.example.sberqrscanner.domain.model.Division
 
 private const val PAGE_HEIGHT = 1120
 private const val PAGE_WIDTH = 792
 
 class GenerateReport {
 
-    operator fun invoke(divisions: List<DivisionItem>, context: Context): PdfDocument {
+    operator fun invoke(divisions: List<Division>, context: Context): PdfDocument {
         val document = PdfDocument()
         val pageInfo = PageInfo.Builder(PAGE_WIDTH, PAGE_HEIGHT, 1).create()
         val page: PdfDocument.Page = document.startPage(pageInfo)
@@ -50,7 +50,7 @@ class GenerateReport {
         for (i in 1..absentCount) {
             if (120F+(i*20F)+40 < PAGE_HEIGHT) {
                 canvas.drawText(
-                    "$i. ${divisions[i - 1].division.name}",
+                    "$i. ${divisions[i - 1].name}",
                     30F,
                     120F + (i * 20F),
                     title

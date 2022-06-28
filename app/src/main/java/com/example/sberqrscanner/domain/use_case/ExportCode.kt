@@ -11,7 +11,10 @@ class ExportCode(
 ) {
 
     operator fun invoke(code: Bitmap, activity: Activity): Reaction<String?> {
-        return externalStorageWorker.exportBitmap(code, activity)
+        return externalStorageWorker.exportFile(
+            ExternalStorageWorker.FileOption.Image(code),
+            activity
+        )
     }
 
 }

@@ -9,11 +9,14 @@ import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.callbackFlow
 import java.lang.Exception
 
 private const val DIVISIONS = "divisions"
 private const val NAME = "name"
+private const val CHECKED = "checked"
 
 class FirestoreDivisionRep: DivisionRepository {
 
@@ -33,14 +36,16 @@ class FirestoreDivisionRep: DivisionRepository {
                     } else {
                         val list = value?.documents?.
                         filterNot {
-                            it.getString("name") == null
+                            it.getString(NAME) == null || it.getBoolean(CHECKED) == null
                         }?.
                         map{ docSnap ->
                             val id = docSnap.id
-                            val name = docSnap.getString("name")
+                            val name = docSnap.getString(NAME)
+                            val checked = docSnap.getBoolean(CHECKED)
                             Division(
                                 id = id,
-                                name = name!!
+                                name = name!!,
+                                checked = checked!!
                             )
                         } ?: listOf()
                         trySend(Reaction.Success(list))
@@ -82,7 +87,10 @@ class FirestoreDivisionRep: DivisionRepository {
         return try {
             db.collection(DIVISIONS)
                 .document(division.id)
-                .set(hashMapOf(Pair(NAME, division.name)))
+                .set(hashMapOf(
+                    NAME to division.name,
+                    CHECKED to division.checked
+                ))
                 .await()
             Reaction.Success(Unit)
         } catch (e: Exception){
@@ -103,5 +111,40 @@ class FirestoreDivisionRep: DivisionRepository {
         }
 
     }
+
+    override suspend fun dropChecks(): Reaction<Unit> {
+//        val db = Firebase.firestore
+//        return try {
+//
+//
+//
+//            val nycRef = db.collection("cities").document("NYC")
+//            val sfRef = db.collection("cities").document("SF")
+//            val laRef = db.collection("cities").document("LA")
+//
+//// Get a new write batch and commit all write operations
+//            db.runBatch { batch ->
+//                // Set the value of 'NYC'
+//                batch.set(nycRef, City())
+//
+//                // Update the population of 'SF'
+//                batch.update(sfRef, "population", 1000000L)
+//
+//                // Delete the city 'LA'
+//                batch.delete(laRef)
+//            }.addOnCompleteListener {
+//                // ...
+//            }
+//            db.collection(DIVISIONS)
+//                .document(division.id)
+//                .delete()
+//                .await()
+//            Reaction.Success(Unit)
+//        } catch (e: Exception){
+//            Reaction.Error(e)
+//        }
+    }
 }
+
+
 

@@ -12,7 +12,9 @@ class ShareCode(
 ) {
 
     operator fun invoke(bitmap: Bitmap, activity: Activity): Reaction<Unit> {
-        return externalStorageWorker.shareBitmap(bitmap, activity)
+        return externalStorageWorker.shareFile(
+            ExternalStorageWorker.FileOption.Image(bitmap),
+            activity)
 
     }
 

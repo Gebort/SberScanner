@@ -13,10 +13,12 @@ import com.example.sberqrscanner.domain.model.Division
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 
-class DivisionCheckListAdapter: ListAdapter<DivisionItem, DivisionCheckListAdapter.ItemViewholder>(DiffCallback())  {
+class DivisionCheckListAdapter(
+    private val onClick: (Division) -> Unit
+): ListAdapter<Division, DivisionCheckListAdapter.ItemViewholder>(DiffCallback())  {
 
     private val adapterScope = CoroutineScope(Dispatchers.Default)
-    private var rawList = listOf<DivisionItem>()
+    private var rawList = listOf<Division>()
     private var filter: String = ""
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemViewholder {
@@ -26,34 +28,38 @@ class DivisionCheckListAdapter: ListAdapter<DivisionItem, DivisionCheckListAdapt
         )
     }
 
-    override fun onBindViewHolder(holder: DivisionCheckListAdapter.ItemViewholder, position: Int) {
-        holder.bind(getItem(position))
+    override fun onBindViewHolder(
+        holder: DivisionCheckListAdapter.ItemViewholder, position: Int) {
+        holder.bind(getItem(position), onClick)
     }
 
     class ItemViewholder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        fun bind(item: DivisionItem) = with(itemView) {
+        fun bind(division: Division, onClick: (Division) -> Unit) = with(itemView) {
             val textDivision: TextView = this.findViewById(R.id.text_division_name)
-            textDivision.text = item.division.name
+            textDivision.text = division.name
             val imageView: ImageView = this.findViewById(R.id.image_check)
             imageView.setImageResource(
-                if (item.checked) R.drawable.ic_check else R.drawable.ic_absent
+                if (division.checked) R.drawable.ic_check else R.drawable.ic_absent
             )
+            setOnClickListener {
+                onClick(division)
+            }
         }
     }
 
-    fun changeList(entries: List<DivisionItem>){
+    fun changeList(entries: List<Division>){
         rawList = entries
         //filter = ""
         submitList(rawList)
     }
 }
 
-class DiffCallback : DiffUtil.ItemCallback<DivisionItem>() {
-    override fun areItemsTheSame(oldItem: DivisionItem, newItem: DivisionItem): Boolean {
-        return oldItem.division.name == newItem.division.name
+class DiffCallback : DiffUtil.ItemCallback<Division>() {
+    override fun areItemsTheSame(oldItem: Division, newItem: Division): Boolean {
+        return oldItem.name == newItem.name
     }
 
-    override fun areContentsTheSame(oldItem: DivisionItem, newItem: DivisionItem): Boolean {
+    override fun areContentsTheSame(oldItem: Division, newItem: Division): Boolean {
         return oldItem.checked == newItem.checked
     }
 }

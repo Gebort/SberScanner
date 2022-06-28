@@ -3,38 +3,47 @@ package com.example.sberqrscanner.presentation.division_edit
 import android.Manifest
 import android.annotation.SuppressLint
 import android.graphics.Bitmap
+import android.graphics.Canvas
+import android.graphics.Color
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.graphics.drawable.toBitmap
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
+import androidx.viewpager2.widget.CompositePageTransformer
+import androidx.viewpager2.widget.MarginPageTransformer
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.input.input
 import com.example.sberqrscanner.MyApp
 import com.example.sberqrscanner.R
 import com.example.sberqrscanner.data.util.Reaction
-import com.example.sberqrscanner.databinding.FragmentDivisionListBinding
 import com.example.sberqrscanner.databinding.FragmentEditDivisionBinding
-import com.example.sberqrscanner.domain.model.Division
-import com.example.sberqrscanner.presentation.division_list.DivisionListEvent
+import com.example.sberqrscanner.presentation.division_edit.adapter.CodeImage
+import com.example.sberqrscanner.presentation.division_edit.adapter.SliderTransformation
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
+import com.google.android.material.tabs.TabLayoutMediator
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
-private const val REQUEST_WRITE_PERMISSION_CODE = 2
+
+private const val REQUEST_STORAGE_PERMISSION_CODE = 2
+private const val PAGES_MARGIN = 50
+private const val PLACEHOLDER_WIDTH = 50
+private const val PLACEHOLDER_HEIGHT = 50
 
 class EditDivisionFragment : Fragment() {
 
-    private val checkPermission = MyApp.instance!!.checkPermission
-    private val requestPermission = MyApp.instance!!.requestPermission
-    private val generateCode = MyApp.instance!!.generateCode
+    private val checkRequestPerm = MyApp.instance!!.checkRequestPerm
+    private val generateQRCode = MyApp.instance!!.generateQRCode
+    private val generateCode128 = MyApp.instance!!.generateCode128
     private val exportCode = MyApp.instance!!.exportCode
     private val shareCode = MyApp.instance!!.shareCode
 
@@ -42,6 +51,7 @@ class EditDivisionFragment : Fragment() {
     private val model: SharedDivisionViewModel by activityViewModels()
     private var _binding: FragmentEditDivisionBinding? = null
     private val binding get() = _binding!!
+    private val adapter = CodeSliderAdapter()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -64,11 +74,25 @@ class EditDivisionFragment : Fragment() {
             update()
         }
         binding.buttonDownload.setOnClickListener {
-            downloadCode(binding.imageCode.drawable.toBitmap())
+            downloadCode()
         }
         binding.buttonShare.setOnClickListener {
-            sendCode(binding.imageCode.drawable.toBitmap())
+            sendCode()
         }
+        val viewPager = binding.codeViewpager
+        val tabLayout = binding.tabLayout
+        viewPager.adapter = adapter
+
+        val marginPageTransformer = MarginPageTransformer(PAGES_MARGIN)
+
+        viewPager.setPageTransformer(CompositePageTransformer().also {
+            it.addTransformer(marginPageTransformer)
+            it.addTransformer(SliderTransformation())
+        })
+
+        TabLayoutMediator(tabLayout, viewPager) { tab, position ->
+            //Some implementation
+        }.attach()
 
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED){
@@ -82,6 +106,7 @@ class EditDivisionFragment : Fragment() {
 
                         if (state.selected != oldState?.selected){
                             binding.buttonDownload.isEnabled = false
+                            binding.buttonShare.isEnabled = false
                             renderCode(state.selected.id)
                         }
 
@@ -135,7 +160,7 @@ class EditDivisionFragment : Fragment() {
     @SuppressLint("CheckResult")
     private fun update(){
         model.state.value.selected?.let {
-            MaterialDialog(requireContext(), ).show {
+            MaterialDialog(requireContext()).show {
                 input(prefill = it.name) { _, text ->
                     model.onEvent(DivisionEditEvent.UpdateSelected(
                             name = text.toString()
@@ -149,18 +174,53 @@ class EditDivisionFragment : Fragment() {
 
     }
 
-    private suspend fun renderCode(data: String){
-        binding.imageCode.setImageBitmap(generateCode(data))
-        binding.buttonDownload.isEnabled = true
+    private suspend fun getPlaceholder(): Bitmap {
+        return Bitmap.createBitmap(
+            PLACEHOLDER_WIDTH,
+            PLACEHOLDER_HEIGHT,
+            Bitmap.Config.ARGB_8888
+        ).also {
+            val canvas = Canvas(it)
+            canvas.drawColor(Color.WHITE)
+        }
     }
 
-    private fun sendCode(code: Bitmap) {
+    private suspend fun renderCode(data: String){
+        lifecycleScope.launch {
+            val codeQR = async {
+                return@async generateQRCode(data)
+            }
+            val codeBar = async {
+                return@async generateCode128(data)
+            }
+            val background = async {
+            return@async getPlaceholder()
+        }
+            val (back) = awaitAll(background)
+            adapter.setBackground(back)
+            val (qrCode, barcode) = awaitAll(codeQR, codeBar)
+            val list = listOf(CodeImage(qrCode), CodeImage(barcode))
+            adapter.changeList(list)
+            binding.buttonDownload.isEnabled = true
+            binding.buttonShare.isEnabled = true
+        }
+    }
 
-        requestAndDo(
-            Manifest.permission.WRITE_EXTERNAL_STORAGE,
-            REQUEST_WRITE_PERMISSION_CODE,
+    private fun getCurrentCode(): Bitmap {
+        return adapter.currentList[binding.codeViewpager.currentItem]
+            .bitmap
+    }
+
+    private fun sendCode() {
+
+        if (
+            checkRequestPerm(
+                Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                REQUEST_STORAGE_PERMISSION_CODE,
+                requireActivity()
+            )
         ) {
-            when (shareCode(code, requireActivity())) {
+            when (shareCode(getCurrentCode(), requireActivity())) {
                 is Reaction.Success -> {}
                 is Reaction.Error -> {
                     Snackbar.make(
@@ -174,13 +234,16 @@ class EditDivisionFragment : Fragment() {
         }
     }
 
-    private fun downloadCode(code: Bitmap){
+    private fun downloadCode(){
 
-        requestAndDo(
-            Manifest.permission.WRITE_EXTERNAL_STORAGE,
-            REQUEST_WRITE_PERMISSION_CODE,
-        ){
-            when (val reaction = exportCode(code, requireActivity())) {
+        if (
+            checkRequestPerm(
+                Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                REQUEST_STORAGE_PERMISSION_CODE,
+                requireActivity()
+            )
+        ) {
+            when (val reaction = exportCode(getCurrentCode(), requireActivity())) {
                 is Reaction.Success -> {
                     Snackbar.make(
                         binding.textName,
@@ -198,23 +261,6 @@ class EditDivisionFragment : Fragment() {
                         .show()
                 }
             }
-        }
-    }
-
-    private fun requestAndDo(permission: String, code: Int, action: () -> Unit) {
-        if (checkPermission(
-                permission,
-                code,
-                requireActivity()
-            )){
-            action()
-        }
-        else {
-            requestPermission(
-                permission,
-                code,
-                requireActivity()
-            )
         }
     }
 

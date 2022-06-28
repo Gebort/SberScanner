@@ -34,6 +34,9 @@
     <string name="report_total" translatable="false">Всего подразделений - %d</string>
     <string name="report_absent_list" translatable="false">Отсутствующие:</string>
     <string name="report_absent_more" translatable="false">ещё %d подразделения…</string>
+    <string name="check_manual">Manual change</string>
+    <string name="confirm">OK</string>
+    <string name="new_session">New session</string>
 
 
 

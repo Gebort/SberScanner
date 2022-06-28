@@ -17,14 +17,15 @@ class MyApp: Application() {
     val scanner = ScannerXCamera()
     val bindCamera = BindCamera(scanner)
     private val codeGenerator = QRCodeGenerator()
-    val generateCode = GenerateCode(codeGenerator)
+    val generateQRCode = GenerateQRCode(codeGenerator)
+    val generateCode128 = GenerateCode128(codeGenerator)
     private val externalStorageWorker = ExternalWorkerImpl()
     val exportCode = ExportCode(externalStorageWorker)
     val shareCode = ShareCode(externalStorageWorker)
     val sharePdf = SharePdf(externalStorageWorker)
     val generateReport = GenerateReport()
     val checkPermission = CheckPermission()
-    val requestPermission = RequestPermission(checkPermission)
+    val checkRequestPerm = CheckRequestPerm(checkPermission)
 
     override fun onCreate() {
         super.onCreate()

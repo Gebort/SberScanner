@@ -60,12 +60,12 @@ class ScannerXCamera: Scanner {
                         Barcode.FORMAT_CODE_128,
                         Barcode.FORMAT_CODE_39,
                         Barcode.FORMAT_CODE_93,
-                        Barcode.FORMAT_EAN_8,
-                        Barcode.FORMAT_EAN_13,
+                        //Barcode.FORMAT_EAN_8,
+                        //Barcode.FORMAT_EAN_13,
                         Barcode.FORMAT_QR_CODE,
-                        Barcode.FORMAT_UPC_A,
-                        Barcode.FORMAT_UPC_E,
-                        Barcode.FORMAT_PDF417
+                        //Barcode.FORMAT_UPC_A,
+                        //Barcode.FORMAT_UPC_E,
+                        //Barcode.FORMAT_PDF417
                     ).build()
                     // getClient() creates a new instance of the MLKit barcode scanner with the specified options
                     val barcodeScanner = BarcodeScanning.getClient(options)

@@ -1,13 +1,13 @@
 package com.example.sberqrscanner.presentation.scanner
 
+import android.Manifest
+import android.annotation.SuppressLint
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
-import android.util.Log
+import android.provider.Settings
 import android.view.*
 import android.widget.Toast
-import androidx.camera.core.CameraSelector
-import androidx.camera.core.Preview
-import androidx.camera.lifecycle.ProcessCameraProvider
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Lifecycle
@@ -15,13 +15,16 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.afollestad.materialdialogs.MaterialDialog
+import com.afollestad.materialdialogs.checkbox.checkBoxPrompt
+import com.example.sberqrscanner.BuildConfig
 import com.example.sberqrscanner.MyApp
 import com.example.sberqrscanner.R
 import com.example.sberqrscanner.data.util.Reaction
 import com.example.sberqrscanner.databinding.FragmentScannerBinding
 import com.example.sberqrscanner.domain.model.Division
+import com.example.sberqrscanner.domain.scanner.ScanResult
 import com.example.sberqrscanner.presentation.scanner.adapter.DivisionCheckListAdapter
-import com.example.sberqrscanner.presentation.scanner.adapter.DivisionItem
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.flow.collect
@@ -29,12 +32,15 @@ import kotlinx.coroutines.launch
 
 
 private const val TAG = "SCANNER"
+private const val CAMERA_PERMISSION_REQUEST_CODE = 1
+private const val REQUEST_STORAGE_PERMISSION_CODE = 2
 
 class ScannerFragment : Fragment() {
 
     private val bindCamera = MyApp.instance!!.bindCamera
     private val sharePdf = MyApp.instance!!.sharePdf
     private val generateReport = MyApp.instance!!.generateReport
+    private val checkRequestPerm = MyApp.instance!!.checkRequestPerm
 
     private var _binding: FragmentScannerBinding? = null
     private val binding get() = _binding!!
@@ -61,36 +67,30 @@ class ScannerFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         binding.recyclerViewCheck.layoutManager = LinearLayoutManager(activity?.applicationContext)
-        adapter = DivisionCheckListAdapter()
+        adapter = DivisionCheckListAdapter(::checkDialog)
         binding.recyclerViewCheck.adapter = adapter
         binding.buttonEdit.setOnClickListener {
             val action = ScannerFragmentDirections.actionScannerFragmentToDivisionListFragment()
             findNavController().navigate(action)
         }
         binding.buttonMakeReport.setOnClickListener {
-            val report = generateReport(model.state.value.divisions, requireContext())
-            when (sharePdf(report, requireActivity())){
-                is Reaction.Success -> {}
-                is Reaction.Error -> {
-                    Snackbar.make(
-                        binding.previewView,
-                        R.string.share_failed,
-                        Snackbar.LENGTH_SHORT
-                    )
-                        .show()
-                }
-            }
+            sendReport()
         }
 
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
-                bindCamera(
-                    viewLifecycleOwner,
-                    requireContext(),
-                    binding.previewView
-                ).collect { scanResult ->
-                    model.onEvent(DivisionCheckEvent.CheckDivision(scanResult))
-                }
+                    checkRequestPerm(
+                        Manifest.permission.CAMERA,
+                        CAMERA_PERMISSION_REQUEST_CODE,
+                        requireActivity()
+                    )
+                    bindCamera(
+                        viewLifecycleOwner,
+                        requireContext(),
+                        binding.previewView
+                    ).collect { scanResult ->
+                        model.onEvent(DivisionCheckEvent.CheckDivision(scanResult))
+                    }
             }
         }
 
@@ -129,6 +129,49 @@ class ScannerFragment : Fragment() {
                     }
                 }
             }
+        }
+    }
+
+    private fun sendReport(){
+        if (
+            checkRequestPerm(
+                Manifest.permission.MANAGE_EXTERNAL_STORAGE,
+                REQUEST_STORAGE_PERMISSION_CODE,
+                requireActivity()
+            )
+        ) {
+            val report = generateReport(model.state.value.divisions, requireContext())
+            when (val reaction = sharePdf(report, requireActivity())){
+                is Reaction.Success -> {}
+                is Reaction.Error -> {
+                    Snackbar.make(
+                        binding.previewView,
+                        R.string.share_failed,
+                        Snackbar.LENGTH_SHORT
+                    )
+                        .show()
+                }
+            }
+        }
+    }
+
+    @SuppressLint("CheckResult")
+    fun checkDialog(division: Division){
+        MaterialDialog(requireContext()).show {
+            checkBoxPrompt(
+                text = division.name,
+                isCheckedDefault = division.checked
+            ) { checked ->
+                if (checked) {
+                    model.onEvent(DivisionCheckEvent.CheckDivision(ScanResult(division.id)))
+                }
+                else {
+                    model.onEvent(DivisionCheckEvent.UncheckDivision(division))
+                }
+            }
+            title(R.string.check_manual)
+            positiveButton { R.string.confirm }
+            negativeButton { R.string.cancel }
         }
     }
 

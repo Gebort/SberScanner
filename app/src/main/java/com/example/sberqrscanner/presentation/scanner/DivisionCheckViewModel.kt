@@ -4,16 +4,15 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.sberqrscanner.MyApp
 import com.example.sberqrscanner.data.util.Reaction
-import com.example.sberqrscanner.domain.model.Division
-import com.example.sberqrscanner.presentation.division_list.DivisionListUiEvent
-import com.example.sberqrscanner.presentation.scanner.adapter.DivisionItem
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.launch
 
 class DivisionCheckViewModel: ViewModel() {
 
     private val getDivisions = MyApp.instance!!.getDivisions
+    private val updateDivision = MyApp.instance!!.updateDivision
 
     private var _state = MutableStateFlow(DivisionCheckState())
     val state get() = _state.asStateFlow()
@@ -30,19 +29,34 @@ class DivisionCheckViewModel: ViewModel() {
     fun onEvent(event: DivisionCheckEvent) {
         when (event) {
             is DivisionCheckEvent.CheckDivision -> {
-                val item = _state.value.divisions.find { it.division.id == event.scanResult.id }
+                val item = _state.value.divisions.find { it.id == event.scanResult.id }
                 item?.let {
                     if (!item.checked) {
-                        val newList = state.value.divisions.toMutableList()
-                        val index = newList.indexOf(item)
-                        val newItem = item.copy(checked = true)
-                        newList[index] = newItem
-                        _state.value = state.value.copy(
-                            divisions = newList
-                        )
                         _uiEvents.trySend(
-                            DivisionCheckUiEvent.DivisionChecked(newItem.division)
+                            DivisionCheckUiEvent.DivisionChecked(item)
                         )
+                        viewModelScope.launch {
+                            when (val reaction = updateDivision(item.copy(checked = true))) {
+                                is Reaction.Success -> {}
+                                is Reaction.Error -> {
+                                    _uiEvents.trySend(DivisionCheckUiEvent.NetworkError(
+                                        reaction.error)
+                                    )
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            is DivisionCheckEvent.UncheckDivision -> {
+                viewModelScope.launch {
+                    when (val reaction = updateDivision(event.division.copy(checked = false))) {
+                        is Reaction.Success -> {}
+                        is Reaction.Error -> {
+                            _uiEvents.trySend(DivisionCheckUiEvent.NetworkError(
+                                reaction.error)
+                            )
+                        }
                     }
                 }
             }
@@ -56,17 +70,14 @@ class DivisionCheckViewModel: ViewModel() {
                 when(reaction){
                     is Reaction.Success -> {
                         _state.value = state.value.copy(
-                            divisions = reaction.data.map { division ->
-                                val old = state.value.divisions.find { it.division == division }
-                                DivisionItem(
-                                    division = division,
-                                    checked = old?.checked ?: false
-                                )
-                            }
+                            divisions = reaction.data
                         )
                     }
-                    is Reaction.Error -> {}
-
+                    is Reaction.Error -> {
+                        _uiEvents.trySend(DivisionCheckUiEvent.NetworkError(
+                            reaction.error)
+                        )
+                    }
                 }
 
             }
