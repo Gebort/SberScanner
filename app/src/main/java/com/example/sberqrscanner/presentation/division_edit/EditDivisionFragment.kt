@@ -212,56 +212,58 @@ class EditDivisionFragment : Fragment() {
     }
 
     private fun sendCode() {
-
-        if (
-            checkRequestPerm(
-                Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                REQUEST_STORAGE_PERMISSION_CODE,
-                requireActivity()
-            )
-        ) {
-            when (shareCode(getCurrentCode(), requireActivity())) {
-                is Reaction.Success -> {}
-                is Reaction.Error -> {
-                    Snackbar.make(
-                        binding.textName,
-                        R.string.code_not_saved,
-                        Snackbar.LENGTH_SHORT
-                    )
-                        .show()
+        lifecycleScope.launch {
+            if (
+                checkRequestPerm(
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                    REQUEST_STORAGE_PERMISSION_CODE,
+                    requireActivity()
+                )
+            ) {
+                when (shareCode(getCurrentCode(), requireActivity())) {
+                    is Reaction.Success -> {}
+                    is Reaction.Error -> {
+                        Snackbar.make(
+                            binding.textName,
+                            R.string.code_not_saved,
+                            Snackbar.LENGTH_SHORT
+                        )
+                            .show()
+                    }
                 }
             }
         }
     }
 
     private fun downloadCode(){
-
-        if (
-            checkRequestPerm(
-                Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                REQUEST_STORAGE_PERMISSION_CODE,
-                requireActivity()
-            )
-        ) {
-            when (val reaction = exportCode(getCurrentCode(), requireActivity())) {
-                is Reaction.Success -> {
-                    Snackbar.make(
-                        binding.textName,
-                        resources.getString(R.string.code_saved, reaction.data),
-                        Snackbar.LENGTH_SHORT
+            lifecycleScope.launch {
+                if (
+                    checkRequestPerm(
+                        Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                        REQUEST_STORAGE_PERMISSION_CODE,
+                        requireActivity()
                     )
-                        .show()
-                }
-                is Reaction.Error -> {
-                    Snackbar.make(
-                        binding.textName,
-                        R.string.code_not_saved,
-                        Snackbar.LENGTH_SHORT
-                    )
-                        .show()
+                ) {
+                    when (val reaction = exportCode(getCurrentCode(), requireActivity())) {
+                        is Reaction.Success -> {
+                            Snackbar.make(
+                                binding.textName,
+                                resources.getString(R.string.code_saved, reaction.data),
+                                Snackbar.LENGTH_SHORT
+                            )
+                                .show()
+                        }
+                        is Reaction.Error -> {
+                            Snackbar.make(
+                                binding.textName,
+                                R.string.code_not_saved,
+                                Snackbar.LENGTH_SHORT
+                            )
+                                .show()
+                        }
+                    }
                 }
             }
-        }
     }
 
     private fun popBack(){

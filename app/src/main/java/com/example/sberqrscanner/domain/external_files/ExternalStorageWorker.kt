@@ -7,9 +7,9 @@ import com.example.sberqrscanner.data.util.Reaction
 
 interface ExternalStorageWorker {
 
-    fun exportFile(file: FileOption, activity: Activity): Reaction<String?>
+    suspend fun exportFile(file: FileOption, activity: Activity): Reaction<String?>
 
-    fun shareFile(file: FileOption, activity: Activity): Reaction<Unit>
+    suspend fun shareFile(file: FileOption, activity: Activity): Reaction<Unit>
 
     sealed class FileOption {
         class Pdf(val data: PdfDocument): FileOption()

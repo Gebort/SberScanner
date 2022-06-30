@@ -176,23 +176,25 @@ class ScannerFragment : Fragment() {
     }
 
     private fun sendReport(){
-        if (
-            checkRequestPerm(
-                Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                REQUEST_STORAGE_PERMISSION_CODE,
-                requireActivity()
-            )
-        ) {
-            val report = generateReport(model.state.value.divisions, requireContext())
-            when (val reaction = sharePdf(report, requireActivity())){
-                is Reaction.Success -> {}
-                is Reaction.Error -> {
-                    Snackbar.make(
-                        binding.previewView,
-                        R.string.share_failed,
-                        Snackbar.LENGTH_SHORT
-                    )
-                        .show()
+        lifecycleScope.launch {
+            if (
+                checkRequestPerm(
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                    REQUEST_STORAGE_PERMISSION_CODE,
+                    requireActivity()
+                )
+            ) {
+                val report = generateReport(model.state.value.divisions, requireContext())
+                when (sharePdf(report, requireActivity())){
+                    is Reaction.Success -> {}
+                    is Reaction.Error -> {
+                        Snackbar.make(
+                            binding.previewView,
+                            R.string.share_failed,
+                            Snackbar.LENGTH_SHORT
+                        )
+                            .show()
+                    }
                 }
             }
         }

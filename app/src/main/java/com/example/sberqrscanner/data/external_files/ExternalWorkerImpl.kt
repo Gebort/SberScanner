@@ -71,8 +71,8 @@ class ExternalWorkerImpl: ExternalStorageWorker {
         }
     }
 
-    override fun exportFile(option: ExternalStorageWorker.FileOption, activity: Activity): Reaction<String?> {
-        return when (val reaction = getUri(option, activity)) {
+    override suspend fun exportFile(file: ExternalStorageWorker.FileOption, activity: Activity): Reaction<String?> {
+        return when (val reaction = getUri(file, activity)) {
             is Reaction.Success -> {
                 val uri = reaction.data
                 activity.sendBroadcast(Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, uri))
@@ -84,7 +84,7 @@ class ExternalWorkerImpl: ExternalStorageWorker {
         }
     }
 
-    override fun shareFile(file: ExternalStorageWorker.FileOption, activity: Activity): Reaction<Unit> {
+    override suspend fun shareFile(file: ExternalStorageWorker.FileOption, activity: Activity): Reaction<Unit> {
         return when (val reaction = getUri(file, activity)){
             is Reaction.Success -> {
                 val uri = reaction.data

@@ -10,7 +10,7 @@ class ExportCode(
     private val externalStorageWorker: ExternalStorageWorker
 ) {
 
-    operator fun invoke(code: Bitmap, activity: Activity): Reaction<String?> {
+    suspend operator fun invoke(code: Bitmap, activity: Activity): Reaction<String?> {
         return externalStorageWorker.exportFile(
             ExternalStorageWorker.FileOption.Image(code),
             activity

@@ -10,7 +10,7 @@ class SharePdf(
     private val externalStorageWorker: ExternalStorageWorker
 ) {
 
-    operator fun invoke(pdf: PdfDocument, activity: Activity): Reaction<Unit> {
+    suspend operator fun invoke(pdf: PdfDocument, activity: Activity): Reaction<Unit> {
         return externalStorageWorker.shareFile(
             ExternalStorageWorker.FileOption.Pdf(pdf),
             activity)

@@ -11,7 +11,7 @@ class ShareCode(
     private val externalStorageWorker: ExternalStorageWorker
 ) {
 
-    operator fun invoke(bitmap: Bitmap, activity: Activity): Reaction<Unit> {
+    suspend operator fun invoke(bitmap: Bitmap, activity: Activity): Reaction<Unit> {
         return externalStorageWorker.shareFile(
             ExternalStorageWorker.FileOption.Image(bitmap),
             activity)
