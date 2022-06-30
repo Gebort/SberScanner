@@ -2,8 +2,8 @@
     <!-- Base application theme. -->
     <style name="Theme.SberQRScanner" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <!-- Primary brand color. -->
-        <item name="colorPrimary">#50993b</item>
-        <item name="colorPrimaryVariant">#377c26</item>
+        <item name="colorPrimary">@color/green_500</item>
+        <item name="colorPrimaryVariant">@color/green_700</item>
         <item name="colorOnPrimary">@color/white</item>
         <!-- Secondary brand color. -->
         <item name="colorSecondary">@color/teal_200</item>
@@ -13,5 +13,10 @@
         <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
         <item name="slider_selected">@color/grey_700</item>
+    </style>
+
+    <style name="Theme.App.Starting" parent="Theme.SplashScreen">
+        <item name="windowSplashScreenAnimatedIcon">@drawable/ic_app_icon_foreground</item>
+        <item name="postSplashScreenTheme">@style/Theme.SberQRScanner</item>
     </style>
 </resources>

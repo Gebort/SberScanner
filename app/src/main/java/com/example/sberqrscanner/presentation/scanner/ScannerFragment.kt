@@ -24,6 +24,7 @@ import com.example.sberqrscanner.data.util.Reaction
 import com.example.sberqrscanner.databinding.FragmentScannerBinding
 import com.example.sberqrscanner.domain.model.Division
 import com.example.sberqrscanner.domain.scanner.ScanResult
+import com.example.sberqrscanner.presentation.MainActivity
 import com.example.sberqrscanner.presentation.scanner.adapter.DivisionCheckListAdapter
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.snackbar.Snackbar
@@ -41,7 +42,6 @@ class ScannerFragment : Fragment() {
     private val sharePdf = MyApp.instance!!.sharePdf
     private val generateReport = MyApp.instance!!.generateReport
     private val checkRequestPerm = MyApp.instance!!.checkRequestPerm
-    private val dropChecks = MyApp.instance!!.dropChecks
 
     private var _binding: FragmentScannerBinding? = null
     private val binding get() = _binding!!
@@ -77,6 +77,9 @@ class ScannerFragment : Fragment() {
         }
         binding.buttonRefresh.setOnClickListener {
             clearChecks()
+        }
+        binding.buttonExit.setOnClickListener {
+            exitProfileDialog()
         }
 
         lifecycleScope.launch {
@@ -124,9 +127,22 @@ class ScannerFragment : Fragment() {
                                     R.string.division_checked,
                                     uiEvent.division.name
                                 ),
-                                Toast.LENGTH_SHORT)
+                                Toast.LENGTH_SHORT
+                            )
                             toast.setGravity(Gravity.CENTER, 0, 0)
                             toast.show()
+                        }
+                        is DivisionCheckUiEvent.Logout -> {
+                            val action = ScannerFragmentDirections.actionGlobalLoginFragment()
+                            findNavController().navigate(action)
+                        }
+                        is DivisionCheckUiEvent.NetworkError -> {
+                            Snackbar.make(
+                                binding.previewView,
+                                R.string.error_happened,
+                                Snackbar.LENGTH_SHORT
+                            )
+                                .show()
                         }
                     }
                 }
@@ -161,19 +177,7 @@ class ScannerFragment : Fragment() {
 
         MaterialDialog(requireContext()).show {
             positiveButton(R.string.confirm) { dialog ->
-                lifecycleScope.launch {
-                    when(dropChecks(model.state.value.divisions.filter { it.checked })) {
-                        is Reaction.Success -> {}
-                        is Reaction.Error -> {
-                            Snackbar.make(
-                                binding.previewView,
-                                R.string.error_happened,
-                                Snackbar.LENGTH_SHORT
-                            )
-                                .show()
-                        }
-                    }
-                }
+                model.onEvent(DivisionCheckEvent.DropChecks)
             }
             negativeButton(R.string.cancel) {}
             title(R.string.drop_checks)
@@ -196,6 +200,16 @@ class ScannerFragment : Fragment() {
             }
             title(R.string.check_manual)
             positiveButton { R.string.confirm }
+        }
+    }
+
+    fun exitProfileDialog(){
+        MaterialDialog(requireContext()).show {
+            positiveButton(R.string.confirm) { dialog ->
+                model.onEvent(DivisionCheckEvent.Logout(requireActivity() as MainActivity))
+            }
+            negativeButton(R.string.cancel) {}
+            title(R.string.change_workplace)
         }
     }
 }

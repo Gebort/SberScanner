@@ -1,13 +1,30 @@
 package com.example.sberqrscanner.presentation
 
 import android.os.Bundle
+import android.view.ViewTreeObserver
 import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import androidx.fragment.app.FragmentContainerView
+import androidx.lifecycle.lifecycleScope
+import androidx.navigation.findNavController
+import com.example.sberqrscanner.MyApp
 import com.example.sberqrscanner.R
+import com.example.sberqrscanner.data.util.Reaction
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.cancel
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity() {
 
+    private val getProfileStorage = MyApp.instance!!.getProfileStorage
+    private val validateProfile = MyApp.instance!!.validateProfile
+
+    private var isFinished = false
+
     override fun onCreate(savedInstanceState: Bundle?) {
+        installSplashScreen()
         super.onCreate(savedInstanceState)
 
         window.setFlags(
@@ -16,54 +33,48 @@ class MainActivity : AppCompatActivity() {
         )
 
         setContentView(R.layout.activity_main)
-
-  //      requestCameraPermission()
-        //requestStoragePermission()
-//        if (!hasCameraPermission())
-//            requestCameraPermission()
-//        if (!hasStoragePermission())
-//            requestStoragePermission()
+        val content: FragmentContainerView = findViewById(R.id.fragmentContainerView)
+        content.viewTreeObserver.addOnPreDrawListener(
+            object : ViewTreeObserver.OnPreDrawListener {
+                override fun onPreDraw(): Boolean {
+                    val profileJob = checkProfile()
+                    return if (isFinished) {
+                        // The content is ready; start drawing.
+                        profileJob.cancel()
+                        content.viewTreeObserver.removeOnPreDrawListener(this)
+                        true
+                    } else {
+                        // The content is not ready; suspend.
+                        false
+                    }
+                }
+            })
     }
 
-//    private fun hasCameraPermission() =
-//        ActivityCompat.checkSelfPermission(
-//            this,
-//            Manifest.permission.CAMERA
-//        ) == PackageManager.PERMISSION_GRANTED
-//
-//    private fun hasStoragePermission() =
-//        ActivityCompat.checkSelfPermission(
-//            this,
-//            Manifest.permission.WRITE_EXTERNAL_STORAGE
-//        ) == PackageManager.PERMISSION_GRANTED
+    private fun checkProfile(): Job {
+        return lifecycleScope.launch {
+                getProfileStorage().collect { reaction ->
+                    when (reaction) {
+                        is Reaction.Error -> {
+                            isFinished = true
+                        }
+                        is Reaction.Success -> {
+                            when (validateProfile(reaction.data)) {
+                                is Reaction.Error -> {
+                                    isFinished = true
+                                }
+                                is Reaction.Success -> {
+                                    if (!isFinished){
+                                        findNavController(R.id.fragmentContainerView)
+                                            .navigate(R.id.action_global_scannerFragment)
+                                        isFinished = true
+                                    }
+                                }
+                            }
+                        }
+                }
+            }
+        }
+    }
 
-//    private fun requestCameraPermission(){
-//        ActivityCompat.requestPermissions(
-//            this,
-//            arrayOf(Manifest.permission.CAMERA),
-//            CAMERA_PERMISSION_REQUEST_CODE
-//        )
-//    }
-
-//    override fun onRequestPermissionsResult(
-//        requestCode: Int,
-//        permissions: Array<out String>,
-//        grantResults: IntArray
-//    ) {
-//        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-//        if ((requestCode == CAMERA_PERMISSION_REQUEST_CODE
-//            && grantResults[0] == PackageManager.PERMISSION_GRANTED)
-//        ) {
-//        } else {
-//            // user did not grant permissions - we can't use the camera
-//            val toast = Toast.makeText(
-//                this,
-//                R.string.provide_permissions,
-//                Toast.LENGTH_LONG)
-//            toast.setGravity(Gravity.CENTER, 0, 0)
-//            toast.show()
-//
-//
-//        }
-//    }
 }

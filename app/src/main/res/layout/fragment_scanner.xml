@@ -59,6 +59,18 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
+        <ImageButton
+            android:id="@+id/button_exit"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:scaleType="centerCrop"
+            android:backgroundTint="#00FFFFFF"
+            android:layout_marginTop="10dp"
+            android:contentDescription="@string/log_out"
+            android:src="@drawable/ic_logout"
+            app:layout_constraintEnd_toStartOf="@+id/button_refresh"
+            app:layout_constraintTop_toTopOf="parent" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <LinearLayout

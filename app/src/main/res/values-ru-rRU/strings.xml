@@ -32,11 +32,13 @@
     <string name="share_failed">Не удалось отправить</string>
     <string name="date_format">dd.MM.yyyy HH:mm</string>
     <string name="check_manual">Ручное изменение</string>
-    <string name="confirm">Ок</string>
+    <string name="ok">Ок</string>
+    <string name="confirm">Подтвердить</string>
     <string name="new_session">Новый сеанс</string>
     <string name="drop_checks">Убрать все отметки?</string>
-
-
-
+    <string name="your_work_place">Адрес вашего рабочего места</string>
+    <string name="city">Город</string>
+    <string name="log_out">Выйти</string>
+    <string name="change_workplace">Поменять рабочее место?</string>
 
 </resources>

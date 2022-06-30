@@ -1,9 +1,12 @@
 package com.example.sberqrscanner.presentation.scanner
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.viewModelScope
 import com.example.sberqrscanner.MyApp
+import com.example.sberqrscanner.R
 import com.example.sberqrscanner.data.util.Reaction
+import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.*
@@ -13,6 +16,9 @@ class DivisionCheckViewModel: ViewModel() {
 
     private val getDivisions = MyApp.instance!!.getDivisions
     private val updateDivision = MyApp.instance!!.updateDivision
+    private val writeProfileStorage = MyApp.instance!!.writeProfileStorage
+    private val exitProfile = MyApp.instance!!.exitProfile
+    private val dropChecks = MyApp.instance!!.dropChecks
 
     private var _state = MutableStateFlow(DivisionCheckState())
     val state get() = _state.asStateFlow()
@@ -60,6 +66,25 @@ class DivisionCheckViewModel: ViewModel() {
                             )
                         }
                     }
+                }
+            }
+            is DivisionCheckEvent.DropChecks -> {
+                viewModelScope.launch {
+                    when(val reaction = dropChecks(state.value.divisions.filter { it.checked })) {
+                        is Reaction.Success -> {}
+                        is Reaction.Error -> {
+                            _uiEvents.trySend(DivisionCheckUiEvent.NetworkError(
+                                reaction.error)
+                            )
+                        }
+                    }
+                }
+            }
+            is DivisionCheckEvent.Logout -> {
+                viewModelScope.launch {
+                    writeProfileStorage(null)
+                    _uiEvents.trySend(DivisionCheckUiEvent.Logout)
+                    exitProfile(event.activity)
                 }
             }
         }
