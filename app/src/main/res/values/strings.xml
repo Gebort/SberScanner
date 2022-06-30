@@ -16,6 +16,7 @@
     <string name="out_of_divisions">%d out of %d divisions</string>
     <string name="provide_permissions">Please, provide the permission</string>
     <string name="division_checked">%s - checked</string>
+    <string name="division_already_checked">Already checked - %s</string>
     <string name="place_code_inside">Place the code inside</string>
     <string name="export">Export</string>
     <string name="select_division">Select a division to edit</string>
@@ -45,6 +46,7 @@
     <string name="default_city" translatable="false">Хабаровск</string>
     <string name="log_out">Log out</string>
     <string name="change_workplace">Change the workplace?</string>
+    <string name="incorrect_division">No division found</string>
 
 
 </resources>

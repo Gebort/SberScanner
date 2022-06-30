@@ -12,6 +12,7 @@
     <string name="error_happened">Ошибка. Проверьте интернет соединение</string>
     <string name="place_code_inside">Наведите на код</string>
     <string name="division_checked">Отмечено - %s</string>
+    <string name="division_already_checked">Уже отмечено - %s</string>
     <string name="provide_permissions">Пожалуйста, предоставьте разрешения</string>
     <string name="out_of">%d из %d</string>
     <string name="out_of_divisions">%d из %d подразделений</string>
@@ -40,5 +41,6 @@
     <string name="city">Город</string>
     <string name="log_out">Выйти</string>
     <string name="change_workplace">Поменять рабочее место?</string>
+    <string name="incorrect_division">Подразделение не найдено</string>
 
 </resources>

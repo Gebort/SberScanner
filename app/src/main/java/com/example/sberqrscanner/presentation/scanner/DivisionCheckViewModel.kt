@@ -37,22 +37,38 @@ class DivisionCheckViewModel: ViewModel() {
             is DivisionCheckEvent.CheckDivisions -> {
                 for (res in event.scans) {
                     val item = _state.value.divisions.find { it.id == res.id }
-                    item?.let {
-                        if (!item.checked) {
-                            _uiEvents.trySend(
-                                DivisionCheckUiEvent.DivisionChecked(item)
-                            )
-                            viewModelScope.launch {
-                                when (val reaction = updateDivision(item.copy(checked = true))) {
-                                    is Reaction.Success -> {}
-                                    is Reaction.Error -> {
-                                        _uiEvents.trySend(DivisionCheckUiEvent.NetworkError(
-                                            reaction.error)
-                                        )
+                    if (item != null ){
+                        item.let {
+                            if (!item.checked) {
+                                _uiEvents.trySend(
+                                    DivisionCheckUiEvent.DivisionChecked(item)
+                                )
+                                viewModelScope.launch {
+                                    when (val reaction = updateDivision(item.copy(checked = true))) {
+                                        is Reaction.Success -> {}
+                                        is Reaction.Error -> {
+                                            _uiEvents.trySend(
+                                                DivisionCheckUiEvent.NetworkError(
+                                                    reaction.error
+                                                )
+                                            )
+                                        }
                                     }
                                 }
                             }
+                            else {
+                                _uiEvents.trySend(
+                                    DivisionCheckUiEvent.AlreadyChecked(
+                                        item
+                                    )
+                                )
+                            }
                         }
+                    }
+                    else {
+                        _uiEvents.trySend(
+                            DivisionCheckUiEvent.WrongCode
+                        )
                     }
                     }
                 }

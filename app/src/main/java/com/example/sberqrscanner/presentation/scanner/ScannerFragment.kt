@@ -6,6 +6,7 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.provider.Settings
+import android.util.Log
 import android.view.*
 import android.widget.Toast
 import androidx.fragment.app.Fragment
@@ -32,7 +33,6 @@ import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 
-private const val TAG = "SCANNER"
 private const val CAMERA_PERMISSION_REQUEST_CODE = 1
 private const val REQUEST_STORAGE_PERMISSION_CODE = 2
 
@@ -48,6 +48,9 @@ class ScannerFragment : Fragment() {
 
     private val model: DivisionCheckViewModel by activityViewModels()
     private var adapter: DivisionCheckListAdapter? = null
+
+    private var lastToastShown = System.currentTimeMillis()
+    private val toastDelay = 2000F
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -144,9 +147,31 @@ class ScannerFragment : Fragment() {
                             )
                                 .show()
                         }
+                        is DivisionCheckUiEvent.WrongCode -> {
+                            showCentralSnackbar(getString(R.string.incorrect_division))
+                        }
+                        is DivisionCheckUiEvent.AlreadyChecked -> {
+                            showCentralSnackbar(resources.getString(
+                                R.string.division_already_checked,
+                                uiEvent.division.name
+                            ))
+                        }
                     }
                 }
             }
+        }
+    }
+
+    private fun showCentralSnackbar(string: String){
+        if (System.currentTimeMillis() - lastToastShown > toastDelay){
+            lastToastShown = System.currentTimeMillis()
+            val toast = Toast.makeText(
+                requireContext(),
+                string,
+                Toast.LENGTH_SHORT
+            )
+            toast.setGravity(Gravity.CENTER, 0, 0)
+            toast.show()
         }
     }
 
