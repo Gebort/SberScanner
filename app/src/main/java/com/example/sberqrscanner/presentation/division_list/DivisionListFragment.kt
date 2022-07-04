@@ -16,21 +16,24 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.input.input
+import com.example.sberqrscanner.MyApp
 import com.example.sberqrscanner.R
 import com.example.sberqrscanner.databinding.FragmentDivisionListBinding
 import com.example.sberqrscanner.domain.model.Division
+import com.example.sberqrscanner.domain.use_case.CreateSnackbar
+import com.example.sberqrscanner.presentation.MainActivity
 import com.example.sberqrscanner.presentation.division_edit.DivisionEditEvent
 import com.example.sberqrscanner.presentation.division_edit.EditDivisionUiEvent
 import com.example.sberqrscanner.presentation.division_edit.SharedDivisionViewModel
+import com.example.sberqrscanner.presentation.scanner.DivisionCheckEvent
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
 class DivisionListFragment : Fragment() {
+
+    private val snackbar = MyApp.instance!!.createSnackbar
 
     private var _binding: FragmentDivisionListBinding? = null
     private val binding get() = _binding!!
@@ -56,6 +59,9 @@ class DivisionListFragment : Fragment() {
         binding.buttonAdd.setOnClickListener {
             insertDivisionByDialog()
         }
+        binding.buttonDelete.setOnClickListener {
+            deleteAddressDialog()
+        }
         binding.buttonBack.setOnClickListener {
             findNavController().popBackStack()
         }
@@ -69,6 +75,10 @@ class DivisionListFragment : Fragment() {
                         binding.progressBar.isGone = true
                     }
 
+                    binding.textAddress.text = resources.getString(
+                        R.string.address,
+                        state.profile.address.name
+                    )
                     binding.textTotalDivisions.text = resources.getString(
                         R.string.total_divisions,
                         state.divisions.size
@@ -81,28 +91,32 @@ class DivisionListFragment : Fragment() {
 
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
-                model.uiEvents.collect { event ->
-                    when (event) {
+                model.uiEvents.collect { uiEvent ->
+                    when (uiEvent) {
                         is DivisionListUiEvent.Error -> {
-                            Snackbar.make(
-                                binding.recyclerView,
-                                R.string.error_happened,
-                                Snackbar.LENGTH_SHORT)
-                                .show()
+                            snackbar(
+                                view = binding.recyclerView,
+                                type = CreateSnackbar.Large,
+                                contentId = R.string.error_happened
+                            )
                         }
                         is DivisionListUiEvent.DivisionDeleted -> {
-                            Snackbar.make(
-                                binding.recyclerView,
-                                resources.getString(R.string.division_deleted, event.division.name),
-                                Snackbar.LENGTH_LONG
-                            )
-                                .setAction(R.string.undo) {
-                                    model.onEvent(DivisionListEvent.InsertDivision(
-                                        name = event.division.name,
-                                        id = event.division.id
-                                    ))
-                                }
-                                .show()
+                            snackbar(
+                                view = binding.recyclerView,
+                                type = CreateSnackbar.LargeAction,
+                                contentStr = resources.getString(
+                                    R.string.division_deleted,
+                                    uiEvent.division.name),
+                                actionId = R.string.undo,
+                            ) {
+                                model.onEvent(DivisionListEvent.InsertDivision(
+                                    name = uiEvent.division.name,
+                                    id = uiEvent.division.id
+                                ))
+                            }
+                        }
+                        is DivisionListUiEvent.AddressDeleted -> {
+                            logOut()
                         }
                     }
                 }
@@ -113,23 +127,44 @@ class DivisionListFragment : Fragment() {
                 modelSelect.uiEvents.collect { uiEvent ->
                     when (uiEvent) {
                         is EditDivisionUiEvent.Deleted -> {
-                            Snackbar.make(
-                                binding.recyclerView,
-                                resources.getString(R.string.division_deleted, uiEvent.division),
-                                Snackbar.LENGTH_LONG
-                            )
-                                .setAction(R.string.undo) {
-                                    model.onEvent(DivisionListEvent.InsertDivision(
-                                        name = uiEvent.division.name,
-                                        id = uiEvent.division.id
-                                    ))
-                                }
-                                .show()
+                            snackbar(
+                                view = binding.recyclerView,
+                                type = CreateSnackbar.LargeAction,
+                                contentStr = resources.getString(
+                                    R.string.division_deleted,
+                                    uiEvent.division.name),
+                                actionId = R.string.undo,
+                            ) {
+                                model.onEvent(DivisionListEvent.InsertDivision(
+                                    name = uiEvent.division.name,
+                                    id = uiEvent.division.id
+                                ))
+                            }
                         }
-                        else -> {}
+                        else -> {
+                            throw Exception("Unrealised type in when")
+                        }
                     }
                 }
             }
+        }
+    }
+
+    private fun logOut(){
+        val action = DivisionListFragmentDirections.actionGlobalLoginFragment()
+        findNavController().navigate(action)
+    }
+
+    private fun deleteAddressDialog(){
+        MaterialDialog(requireContext()).show {
+            positiveButton(R.string.confirm) { dialog ->
+                model.onEvent(DivisionListEvent.DeleteAddress(requireActivity() as MainActivity))
+            }
+            negativeButton(R.string.cancel)
+            title(text = resources.getString(
+                R.string.delete_address,
+                model.state.value.profile.address
+            ))
         }
     }
 
@@ -152,24 +187,4 @@ class DivisionListFragment : Fragment() {
             negativeButton(R.string.cancel)
         }
     }
-
-//    companion object {
-//        /**
-//         * Use this factory method to create a new instance of
-//         * this fragment using the provided parameters.
-//         *
-//         * @param param1 Parameter 1.
-//         * @param param2 Parameter 2.
-//         * @return A new instance of fragment DivisionListFragment.
-//         */
-//        // TODO: Rename and change types and number of parameters
-//        @JvmStatic
-//        fun newInstance(param1: String, param2: String) =
-//            DivisionListFragment().apply {
-//                arguments = Bundle().apply {
-//                    putString(ARG_PARAM1, param1)
-//                    putString(ARG_PARAM2, param2)
-//                }
-//            }
-//    }
 }

@@ -3,28 +3,25 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:layout_marginTop="20dp"
     android:orientation="horizontal"
     android:padding="10dp">
 
+    <ImageView
+        android:id="@+id/image_add"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_weight="0"
+        android:scaleType="centerCrop"
+        app:srcCompat="@drawable/ic_add" />
+
     <TextView
-        android:id="@+id/text_address_name"
+        android:id="@+id/text_new_address"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_marginLeft="10dp"
-        android:layout_weight="0"
+        android:layout_weight="1"
         android:fontFamily="sans-serif-medium"
-        android:text="Гамарника 12"
+        android:text="@string/add_address"
         android:textSize="20sp" />
-
-    <ImageView
-        android:id="@+id/image_check"
-        android:layout_width="25dp"
-        android:layout_height="25dp"
-        android:layout_gravity="center|left"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        android:layout_weight="0"
-        app:srcCompat="@drawable/ic_check" />
-
 </LinearLayout>

@@ -8,6 +8,7 @@ import com.example.sberqrscanner.domain.login.CityOptions
 data class LoginState(
     val loading: Boolean = false,
     val error: Boolean = false,
+    val cityStr: String = "",
     val canBeValidated: Boolean = false,
     val cityOptions: CityOptions = CityOptions(listOf()),
     val addressOption: AddressOption? = null

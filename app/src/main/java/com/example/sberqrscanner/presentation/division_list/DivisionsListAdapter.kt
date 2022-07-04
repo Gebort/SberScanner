@@ -18,9 +18,7 @@ class DivisionsListAdapter(
     private val onClick: (Division) -> Unit
 ): ListAdapter<Division, DivisionsListAdapter.ItemViewholder>(DiffCallback())  {
 
-    private val adapterScope = CoroutineScope(Dispatchers.Default)
     private var rawList = listOf<Division>()
-    private var filter: String = ""
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemViewholder {
         return ItemViewholder(
@@ -45,7 +43,6 @@ class DivisionsListAdapter(
 
     fun changeList(entries: List<Division>){
         rawList = entries
-        //filter = ""
         submitList(rawList)
     }
 }

@@ -18,11 +18,12 @@
         <entry key="..\:/Projects/AndroidStudioProjects/SberQRScanner/app/src/main/res/drawable/ic_share.xml" value="0.1" />
         <entry key="..\:/Projects/AndroidStudioProjects/SberQRScanner/app/src/main/res/drawable/rounded.xml" value="0.1" />
         <entry key="..\:/Projects/AndroidStudioProjects/SberQRScanner/app/src/main/res/drawable/scan_area.xml" value="0.1" />
+        <entry key="..\:/Projects/AndroidStudioProjects/SberQRScanner/app/src/main/res/drawable/scroll_vertical.xml" value="0.1" />
         <entry key="..\:/Projects/AndroidStudioProjects/SberQRScanner/app/src/main/res/drawable/selected_dot.xml" value="0.1" />
         <entry key="..\:/Projects/AndroidStudioProjects/SberQRScanner/app/src/main/res/drawable/tab_selector.xml" value="0.1" />
         <entry key="..\:/Projects/AndroidStudioProjects/SberQRScanner/app/src/main/res/drawable/text_layout_color.xml" value="0.1" />
         <entry key="..\:/Projects/AndroidStudioProjects/SberQRScanner/app/src/main/res/drawable/text_layout_selector.xml" value="0.1" />
-        <entry key="..\:/Projects/AndroidStudioProjects/SberQRScanner/app/src/main/res/layout-land/fragment_division_list.xml" value="0.22" />
+        <entry key="..\:/Projects/AndroidStudioProjects/SberQRScanner/app/src/main/res/layout-land/fragment_division_list.xml" value="0.2259577795152463" />
         <entry key="..\:/Projects/AndroidStudioProjects/SberQRScanner/app/src/main/res/layout-land/fragment_edit_division.xml" value="0.16666666666666666" />
         <entry key="..\:/Projects/AndroidStudioProjects/SberQRScanner/app/src/main/res/layout-land/fragment_login.xml" value="0.22" />
         <entry key="..\:/Projects/AndroidStudioProjects/SberQRScanner/app/src/main/res/layout-land/fragment_scanner.xml" value="0.16666666666666666" />
@@ -37,6 +38,7 @@
         <entry key="..\:/Projects/AndroidStudioProjects/SberQRScanner/app/src/main/res/layout/fragment_login.xml" value="0.22" />
         <entry key="..\:/Projects/AndroidStudioProjects/SberQRScanner/app/src/main/res/layout/fragment_scanner.xml" value="0.16666666666666666" />
         <entry key="..\:/Projects/AndroidStudioProjects/SberQRScanner/app/src/main/res/layout/fragment_splashscreen.xml" value="0.1308876811594203" />
+        <entry key="..\:/Projects/AndroidStudioProjects/SberQRScanner/app/src/main/res/layout/new_address_item.xml" value="0.4737704918032787" />
         <entry key="..\:/Projects/AndroidStudioProjects/SberQRScanner/app/src/main/res/menu/divisions_action_menu.xml" value="0.1796875" />
         <entry key="..\:/Projects/AndroidStudioProjects/SberQRScanner/app/src/main/res/xml/selected_dot.xml" value="0.1793478260869565" />
       </map>

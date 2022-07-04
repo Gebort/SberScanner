@@ -147,7 +147,6 @@ class FirestoreDivisionRep: DivisionRepository {
         } catch (e: Exception) {
             Reaction.Error(e)
         }
-
     }
 
     override suspend fun dropChecks(divisions: List<Division>): Reaction<Unit> {
@@ -266,6 +265,108 @@ class FirestoreDivisionRep: DivisionRepository {
         } catch (e: Exception) {
             Reaction.Error(e)
         }
+    }
+
+    override suspend fun insertAddress(city: City, address: String, id: String?): Reaction<Unit> {
+        val db = Firebase.firestore
+        return try {
+            if (id == null) {
+                db.collection(CITIES)
+                    .document(city.id)
+                    .collection(ADDRESSES)
+                    .add(hashMapOf(
+                        ADDRESS to address,
+                    ))
+                    .await()
+            } else {
+                db.collection(CITIES)
+                    .document(city.id)
+                    .collection(ADDRESSES)
+                    .document(id)
+                    .set(hashMapOf(ADDRESS to address))
+                    .await()
+            }
+            Reaction.Success(Unit)
+        } catch (e: Exception) {
+            Reaction.Error(e)
+        }
+    }
+
+    override suspend fun insertCity(city: String, address: String, id: String?): Reaction<City> {
+        return try {
+            val db = Firebase.firestore
+            val cityRef =
+                if (id == null) db.collection(CITIES).document()
+                else db.collection(CITIES).document(id)
+
+            cityRef
+                .set(hashMapOf(NAME to city))
+                .continueWith{
+                    cityRef.collection(ADDRESSES)
+                        .add(hashMapOf(ADDRESS to address))
+                }
+                .await()
+            Reaction.Success(
+                City(id = cityRef.id, name = city)
+            )
+
+        } catch (e: Exception) {
+            Reaction.Error(e)
+        }
+    }
+
+    override suspend fun deleteAddress(address: Address): Reaction<Unit> {
+        if (profile == null) {
+            throw Exception("Unauthorized access")
+        }
+        val db = Firebase.firestore
+        return try {
+            val cityDoc = db.collection(CITIES)
+                .document(profile!!.city.id)
+                .collection(ADDRESSES)
+                .get()
+            cityDoc.await()
+            if (cityDoc.result.size() <= 1) {
+                db.collection(CITIES)
+                    .document(profile!!.city.id)
+                    .delete()
+                    .await()
+            }
+            else {
+                db.collection(CITIES)
+                    .document(profile!!.city.id)
+                    .collection(ADDRESSES)
+                    .document(profile!!.address.id)
+                    .delete()
+                    .await()
+            }
+            Reaction.Success(Unit)
+        } catch (e: Exception) {
+            Reaction.Error(e)
+        }
+    }
+
+    override suspend fun deleteCity(city: City): Reaction<Unit> {
+        if (profile == null) {
+            throw Exception("Unauthorized access")
+        }
+        val db = Firebase.firestore
+        return try {
+            db.collection(CITIES)
+                .document(profile!!.city.id)
+                .delete()
+                .await()
+            Reaction.Success(Unit)
+        } catch (e: Exception) {
+            Reaction.Error(e)
+        }
+    }
+
+    override fun getProfile(): Profile {
+        if (profile == null){
+            throw Exception("Unauthorized access")
+        }
+        return profile!!
     }
 
     override fun exitProfile() {

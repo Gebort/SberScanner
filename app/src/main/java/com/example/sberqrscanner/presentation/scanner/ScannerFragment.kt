@@ -25,6 +25,7 @@ import com.example.sberqrscanner.data.util.Reaction
 import com.example.sberqrscanner.databinding.FragmentScannerBinding
 import com.example.sberqrscanner.domain.model.Division
 import com.example.sberqrscanner.domain.scanner.ScanResult
+import com.example.sberqrscanner.domain.use_case.CreateSnackbar
 import com.example.sberqrscanner.presentation.MainActivity
 import com.example.sberqrscanner.presentation.scanner.adapter.DivisionCheckListAdapter
 import com.google.android.material.bottomsheet.BottomSheetBehavior
@@ -42,6 +43,7 @@ class ScannerFragment : Fragment() {
     private val sharePdf = MyApp.instance!!.sharePdf
     private val generateReport = MyApp.instance!!.generateReport
     private val checkRequestPerm = MyApp.instance!!.checkRequestPerm
+    private val snackbar = MyApp.instance!!.createSnackbar
 
     private var _binding: FragmentScannerBinding? = null
     private val binding get() = _binding!!
@@ -140,12 +142,11 @@ class ScannerFragment : Fragment() {
                             findNavController().navigate(action)
                         }
                         is DivisionCheckUiEvent.NetworkError -> {
-                            Snackbar.make(
-                                binding.previewView,
-                                R.string.error_happened,
-                                Snackbar.LENGTH_SHORT
+                            snackbar(
+                                view = binding.imageView,
+                                type = CreateSnackbar.Large,
+                                contentId = R.string.error_happened,
                             )
-                                .show()
                         }
                         is DivisionCheckUiEvent.WrongCode -> {
                             showCentralSnackbar(getString(R.string.incorrect_division))
@@ -165,13 +166,11 @@ class ScannerFragment : Fragment() {
     private fun showCentralSnackbar(string: String){
         if (System.currentTimeMillis() - lastToastShown > toastDelay){
             lastToastShown = System.currentTimeMillis()
-            val toast = Toast.makeText(
-                requireContext(),
-                string,
-                Toast.LENGTH_SHORT
+            snackbar(
+                view = binding.imageView,
+                type = CreateSnackbar.SmallCenter,
+                contentStr = string
             )
-            toast.setGravity(Gravity.CENTER, 0, 0)
-            toast.show()
         }
     }
 
@@ -230,7 +229,7 @@ class ScannerFragment : Fragment() {
         }
     }
 
-    fun exitProfileDialog(){
+    private fun exitProfileDialog(){
         MaterialDialog(requireContext()).show {
             positiveButton(R.string.confirm) { dialog ->
                 model.onEvent(DivisionCheckEvent.Logout(requireActivity() as MainActivity))

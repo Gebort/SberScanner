@@ -1,15 +1,12 @@
 package com.example.sberqrscanner.presentation.login
 
-import android.content.pm.ActivityInfo
 import android.os.Bundle
-import android.view.*
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
-import android.view.inputmethod.InputMethod
 import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
-import android.widget.TextView
-import android.widget.Toast
-import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Lifecycle
@@ -17,6 +14,8 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.afollestad.materialdialogs.MaterialDialog
+import com.afollestad.materialdialogs.input.input
 import com.afollestad.materialdialogs.utils.MDUtil.textChanged
 import com.example.sberqrscanner.R
 import com.example.sberqrscanner.databinding.FragmentLoginBinding
@@ -24,6 +23,7 @@ import com.example.sberqrscanner.domain.login.Address
 import com.example.sberqrscanner.domain.login.City
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 
@@ -56,6 +56,7 @@ class LoginFragment : Fragment() {
 
         with(binding.inputCity) {
             setAdapter(cityAdapter)
+            threshold = 0
             validator = object : AutoCompleteTextView.Validator {
                 override fun isValid(p0: CharSequence?): Boolean {
                     val c = model.state.value.cityOptions.cities.find { it.name == p0.toString() }
@@ -71,7 +72,7 @@ class LoginFragment : Fragment() {
                 }
             }
             textChanged {  text ->
-                onCitySelect(text.toString())
+                onCityChange(text.toString())
             }
 
             setImeActionLabel(
@@ -93,18 +94,21 @@ class LoginFragment : Fragment() {
         }
 
         binding.recyclerViewAddresses.layoutManager = LinearLayoutManager(activity?.applicationContext)
-        addressesAdapter = AddressesAdapter(::onAddressSelect)
+        addressesAdapter = AddressesAdapter(
+            onClickAddress =  ::onAddressSelect,
+            onClickNew = ::onNewAddress
+        )
         binding.recyclerViewAddresses.adapter = addressesAdapter
 
         binding.buttonLogin.setOnClickListener {
             tryLogin()
         }
 
-            lifecycleScope.launch {
+            viewLifecycleOwner.lifecycleScope.launch {
                 repeatOnLifecycle(Lifecycle.State.STARTED) {
-                    model.state.collect { state ->
+                    model.state.collectLatest { state ->
 
-                        binding.buttonLogin.isEnabled = state.canBeValidated && !state.loading
+                         binding.buttonLogin.isEnabled = state.canBeValidated && !state.loading
 
                         binding.recyclerViewAddresses.isEnabled = !state.loading
                         binding.inputCity.isEnabled = !state.loading
@@ -114,6 +118,11 @@ class LoginFragment : Fragment() {
                             addAll(state.cityOptions.cities)
                         }
                         cityAdapter.notifyDataSetChanged()
+
+                        if (binding.inputCity.text.toString() != state.cityStr){
+                            binding.inputCity.setText(state.cityStr)
+                        }
+
                         if (firstSet && state.cityOptions.cities.isNotEmpty()) {
                             binding.inputCity.setText(R.string.default_city)
                             firstSet = false
@@ -121,12 +130,16 @@ class LoginFragment : Fragment() {
 
                         binding.layoutCity.error = if (state.error) "" else null
 
-                        addressesAdapter?.changeList(state.addressOption?.addresses ?: listOf())
+                        addressesAdapter?.changeList(
+                            model.state.value.addressOption?.addresses ?: listOf(),
+                            state.cityStr != ""
+                        )
+
                     }
                 }
             }
 
-        lifecycleScope.launch {
+        viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED){
                 model.uiEvents.collect { uiEvent ->
                     when (uiEvent) {
@@ -156,14 +169,10 @@ class LoginFragment : Fragment() {
         model.onEvent(LoginEvent.TryLogin)
     }
 
-    private fun onCitySelect(selectedCity: String){
-        model.state.value.cityOptions.cities.let { cities ->
-            val city = cities.find { it.name == selectedCity }
-            model.onEvent(LoginEvent.CityChanged(city))
+    private fun onCityChange(selectedCity: String){
+            model.onEvent(LoginEvent.CityChanged(selectedCity))
             addressesAdapter?.removeSelected()
         }
-
-    }
 
     private fun onAddressSelect(selectedAddress: Address){
         model.state.value.addressOption?.addresses?.let { addresses ->
@@ -176,6 +185,23 @@ class LoginFragment : Fragment() {
             }
         }
 
+    }
+
+    private fun onNewAddress(){
+        MaterialDialog(requireContext()).show {
+            input { _, text ->
+                model.onEvent(
+                    LoginEvent.NewAddress(
+                        city = binding.inputCity.text.toString(),
+                        address = text.toString()
+                ))
+            }
+            title(text = resources.getString(
+                R.string.add_address_for_city,
+                binding.inputCity.text.toString()))
+            positiveButton(R.string.add)
+            negativeButton(R.string.cancel)
+        }
     }
 
     }

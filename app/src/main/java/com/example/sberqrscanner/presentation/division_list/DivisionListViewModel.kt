@@ -1,10 +1,13 @@
 package com.example.sberqrscanner.presentation.division_list
 
+import android.app.Activity
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.sberqrscanner.MyApp
 import com.example.sberqrscanner.data.util.Reaction
 import com.example.sberqrscanner.domain.model.Division
+import com.example.sberqrscanner.presentation.MainActivity
+import com.example.sberqrscanner.presentation.scanner.DivisionCheckUiEvent
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.*
@@ -14,8 +17,13 @@ class DivisionListViewModel: ViewModel() {
 
     private val insertDivision = MyApp.instance!!.insertDivision
     private val getDivisions = MyApp.instance!!.getDivisions
+    private val getProfile = MyApp.instance!!.getProfile
+    private val exitProfile = MyApp.instance!!.exitProfile
+    private val deleteAddress = MyApp.instance!!.deleteAddress
 
-    private var _state = MutableStateFlow(DivisionListState())
+    private val profile = getProfile()
+
+    private var _state = MutableStateFlow(DivisionListState(profile = profile))
     val state get() = _state.asStateFlow()
 
     private var _uiEvents = Channel<DivisionListUiEvent>()
@@ -31,6 +39,27 @@ class DivisionListViewModel: ViewModel() {
         when(event){
             is DivisionListEvent.InsertDivision -> {
                 newDivision(event.name, event.id)
+            }
+            is DivisionListEvent.DeleteAddress -> {
+                deleteAddress(event.activity)
+            }
+        }
+    }
+
+    private fun deleteAddress(activity: MainActivity){
+        viewModelScope.launch {
+            _state.update { it.copy(
+                    loading = true
+                ) }
+            when (val reaction = deleteAddress(profile.address)){
+                is Reaction.Success -> {
+                    exitProfile(activity){
+                        _uiEvents.trySend(DivisionListUiEvent.AddressDeleted)
+                    }
+                }
+                is Reaction.Error -> {
+                    _uiEvents.trySend(DivisionListUiEvent.Error(reaction.error))
+                }
             }
         }
     }

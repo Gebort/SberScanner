@@ -16,7 +16,6 @@ class DivisionCheckViewModel: ViewModel() {
 
     private val getDivisions = MyApp.instance!!.getDivisions
     private val updateDivision = MyApp.instance!!.updateDivision
-    private val writeProfileStorage = MyApp.instance!!.writeProfileStorage
     private val exitProfile = MyApp.instance!!.exitProfile
     private val dropChecks = MyApp.instance!!.dropChecks
 
@@ -98,9 +97,9 @@ class DivisionCheckViewModel: ViewModel() {
             }
             is DivisionCheckEvent.Logout -> {
                 viewModelScope.launch {
-                    writeProfileStorage(null)
-                    _uiEvents.trySend(DivisionCheckUiEvent.Logout)
-                    exitProfile(event.activity)
+                    exitProfile(event.activity){
+                        _uiEvents.trySend(DivisionCheckUiEvent.Logout)
+                    }
                 }
             }
         }

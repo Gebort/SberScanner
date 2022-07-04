@@ -16,6 +16,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="32dp"
+            android:indeterminate="true"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
@@ -78,7 +79,29 @@
             android:fontFamily="sans-serif-light"
             android:text="@string/select_division"
             app:layout_constraintStart_toStartOf="@+id/text_total_divisions"
+            app:layout_constraintTop_toBottomOf="@+id/text_address" />
+
+        <TextView
+            android:id="@+id/text_address"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif-light"
+            android:text="@string/address"
+            android:textSize="16sp"
+            app:layout_constraintStart_toStartOf="@+id/text_total_divisions"
             app:layout_constraintTop_toBottomOf="@+id/text_total_divisions" />
+
+        <ImageButton
+            android:id="@+id/button_delete"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:backgroundTint="#00FFFFFF"
+            android:contentDescription="@string/delete"
+            android:scaleType="centerCrop"
+            android:src="@drawable/ic_delete"
+            app:layout_constraintBottom_toBottomOf="@+id/text_total_divisions"
+            app:layout_constraintStart_toEndOf="@+id/text_total_divisions"
+            app:layout_constraintTop_toTopOf="@+id/text_total_divisions" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

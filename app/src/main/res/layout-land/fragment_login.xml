@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:paddingLeft="35dp"
-    android:paddingTop="5dp"
+    android:paddingTop="20dp"
     android:paddingRight="35dp"
     android:paddingBottom="5dp"
     tools:context=".presentation.login.LoginFragment">
@@ -14,10 +14,10 @@
         android:id="@+id/textView2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
         android:layout_marginTop="24dp"
         android:text="@string/your_work_place"
         android:textSize="24sp"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -26,14 +26,15 @@
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="200dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="200dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginEnd="32dp"
         app:boxStrokeColor="@color/text_layout_color"
         app:counterTextColor="@color/text_layout_color"
+        app:endIconMode="clear_text"
+        app:layout_constraintBottom_toBottomOf="@+id/textView2"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView2">
+        app:layout_constraintStart_toEndOf="@+id/textView2"
+        app:layout_constraintTop_toTopOf="@+id/textView2">
 
         <AutoCompleteTextView
             android:id="@+id/input_city"
@@ -54,6 +55,11 @@
         android:layout_marginStart="24dp"
         android:layout_marginTop="24dp"
         android:layout_marginEnd="24dp"
+        android:fadeScrollbars="false"
+        android:scrollbarAlwaysDrawVerticalTrack="true"
+        android:scrollbarThumbVertical="@drawable/scroll_vertical"
+        android:scrollbars="vertical"
+        android:verticalScrollbarPosition="defaultPosition"
         app:layout_constraintBottom_toTopOf="@+id/button_login"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

@@ -42,5 +42,10 @@
     <string name="log_out">Выйти</string>
     <string name="change_workplace">Поменять рабочее место?</string>
     <string name="incorrect_division">Подразделение не найдено</string>
+    <string name="add_address">Добавить адрес</string>
+    <string name="add_address_for_city">Введите новый адрес для города %s</string>
+    <string name="address">%s</string>
+    <string name="delete_address">Удалить адрес %s?</string>
+
 
 </resources>

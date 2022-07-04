@@ -19,6 +19,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="32dp"
+            android:indeterminate="true"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
@@ -31,9 +32,9 @@
             android:fontFamily="sans-serif-medium"
             android:text="@string/total_divisions"
             android:textSize="20sp"
-            app:layout_constraintBottom_toBottomOf="@+id/button_back"
-            app:layout_constraintStart_toEndOf="@+id/button_back"
-            app:layout_constraintTop_toTopOf="@+id/button_back" />
+            app:layout_constraintBottom_toBottomOf="@+id/text_address"
+            app:layout_constraintStart_toEndOf="@+id/textView3"
+            app:layout_constraintTop_toTopOf="@+id/text_address" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recycler_view"
@@ -53,8 +54,8 @@
             android:id="@+id/button_add"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="32dp"
-            android:layout_marginBottom="32dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="16dp"
             android:clickable="true"
             android:contentDescription="@string/add"
             android:focusable="true"
@@ -76,12 +77,49 @@
 
         <TextView
             android:id="@+id/textView"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
             android:fontFamily="sans-serif-light"
             android:text="@string/select_division"
-            app:layout_constraintStart_toStartOf="@+id/text_total_divisions"
+            app:layout_constraintEnd_toStartOf="@+id/button_delete"
+            app:layout_constraintStart_toEndOf="@+id/button_back"
             app:layout_constraintTop_toBottomOf="@+id/text_total_divisions" />
+
+        <TextView
+            android:id="@+id/text_address"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif-medium"
+            android:text="@string/address"
+            android:textSize="20sp"
+            app:layout_constraintBottom_toBottomOf="@+id/button_back"
+            app:layout_constraintStart_toEndOf="@+id/button_back"
+            app:layout_constraintTop_toTopOf="@+id/button_back" />
+
+        <TextView
+            android:id="@+id/textView3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:fontFamily="sans-serif-medium"
+            android:text="-"
+            android:textSize="20sp"
+            app:layout_constraintBottom_toBottomOf="@+id/text_address"
+            app:layout_constraintStart_toEndOf="@+id/text_address"
+            app:layout_constraintTop_toTopOf="@+id/text_address" />
+
+        <ImageButton
+            android:id="@+id/button_delete"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:backgroundTint="#00FFFFFF"
+            android:contentDescription="@string/delete"
+            android:scaleType="centerCrop"
+            android:src="@drawable/ic_delete"
+            app:layout_constraintBottom_toBottomOf="@+id/text_total_divisions"
+            app:layout_constraintStart_toEndOf="@+id/text_total_divisions"
+            app:layout_constraintTop_toTopOf="@+id/text_total_divisions" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

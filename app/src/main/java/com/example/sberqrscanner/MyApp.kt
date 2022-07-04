@@ -11,6 +11,11 @@ import com.example.sberqrscanner.domain.use_case.*
 class MyApp: Application() {
 
     private val divisionsRep = FirestoreDivisionRep()
+
+    private lateinit var profileStorage: ProfileDatastore
+    private lateinit var writeProfileStorage: WriteProfileStorage
+    lateinit var getProfileStorage: GetProfileStorage
+
     val getDivisions = GetDivisions(divisionsRep)
     val insertDivision = InsertDivision(divisionsRep)
     val deleteDivision = DeleteDivision(divisionsRep)
@@ -18,8 +23,13 @@ class MyApp: Application() {
     val dropChecks = DropChecks(divisionsRep)
     val getCityOptions = GetCityOptions(divisionsRep)
     val getAddressesOptions = GetAddressesOptions(divisionsRep)
-    val validateProfile = ValidateProfile(divisionsRep)
-    val exitProfile = ExitProfile(divisionsRep)
+    lateinit var validateProfile: ValidateProfile
+    lateinit var exitProfile: ExitProfile
+    val getProfile = GetProfile(divisionsRep)
+    val insertCity = InsertCity(divisionsRep)
+    val insertAddress = InsertAddress(divisionsRep)
+    val deleteAddress = DeleteAddress(divisionsRep)
+    val deleteCity = DeleteCity(divisionsRep)
 
     val scanner = ScannerXCamera()
     val bindCamera = BindCamera(scanner)
@@ -38,9 +48,8 @@ class MyApp: Application() {
     val checkPermission = CheckPermission()
     val checkRequestPerm = CheckRequestPerm(checkPermission)
 
-    private lateinit var profileStorage: ProfileDatastore
-    lateinit var writeProfileStorage: WriteProfileStorage
-    lateinit var getProfileStorage: GetProfileStorage
+    val createSnackbar = CreateSnackbar()
+
 
     override fun onCreate() {
         super.onCreate()
@@ -48,6 +57,8 @@ class MyApp: Application() {
         profileStorage = ProfileDatastore(this.applicationContext)
         writeProfileStorage = WriteProfileStorage(profileStorage)
         getProfileStorage = GetProfileStorage(profileStorage)
+        validateProfile = ValidateProfile(divisionsRep, writeProfileStorage)
+        exitProfile = ExitProfile(divisionsRep, writeProfileStorage)
     }
 
     companion object {

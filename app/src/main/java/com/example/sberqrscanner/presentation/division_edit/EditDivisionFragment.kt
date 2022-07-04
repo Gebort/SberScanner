@@ -23,6 +23,7 @@ import com.example.sberqrscanner.MyApp
 import com.example.sberqrscanner.R
 import com.example.sberqrscanner.data.util.Reaction
 import com.example.sberqrscanner.databinding.FragmentEditDivisionBinding
+import com.example.sberqrscanner.domain.use_case.CreateSnackbar
 import com.example.sberqrscanner.presentation.division_edit.adapter.CodeImage
 import com.example.sberqrscanner.presentation.division_edit.adapter.SliderTransformation
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -46,6 +47,7 @@ class EditDivisionFragment : Fragment() {
     private val generateCode128 = MyApp.instance!!.generateCode128
     private val exportCode = MyApp.instance!!.exportCode
     private val shareCode = MyApp.instance!!.shareCode
+    private val snackbar = MyApp.instance!!.createSnackbar
 
     private var oldState: EditDivisionState? = null
     private val model: SharedDivisionViewModel by activityViewModels()
@@ -223,12 +225,11 @@ class EditDivisionFragment : Fragment() {
                 when (shareCode(getCurrentCode(), requireActivity())) {
                     is Reaction.Success -> {}
                     is Reaction.Error -> {
-                        Snackbar.make(
-                            binding.textName,
-                            R.string.code_not_saved,
-                            Snackbar.LENGTH_SHORT
+                        snackbar(
+                            view = binding.codeViewpager,
+                            type = CreateSnackbar.Large,
+                            contentId = R.string.code_not_saved
                         )
-                            .show()
                     }
                 }
             }
@@ -246,20 +247,20 @@ class EditDivisionFragment : Fragment() {
                 ) {
                     when (val reaction = exportCode(getCurrentCode(), requireActivity())) {
                         is Reaction.Success -> {
-                            Snackbar.make(
-                                binding.textName,
-                                resources.getString(R.string.code_saved, reaction.data),
-                                Snackbar.LENGTH_SHORT
+                            snackbar(
+                                view = binding.codeViewpager,
+                                type = CreateSnackbar.Large,
+                                contentStr = resources.getString(
+                                    R.string.code_saved,
+                                    reaction.data)
                             )
-                                .show()
                         }
                         is Reaction.Error -> {
-                            Snackbar.make(
-                                binding.textName,
-                                R.string.code_not_saved,
-                                Snackbar.LENGTH_SHORT
+                            snackbar(
+                                view = binding.codeViewpager,
+                                type = CreateSnackbar.Large,
+                                contentId = R.string.code_not_saved
                             )
-                                .show()
                         }
                     }
                 }

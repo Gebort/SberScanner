@@ -47,6 +47,10 @@
     <string name="log_out">Log out</string>
     <string name="change_workplace">Change the workplace?</string>
     <string name="incorrect_division">No division found</string>
+    <string name="add_address">New address</string>
+    <string name="add_address_for_city">Type in new address for the city %s</string>
+    <string name="address">%s</string>
+    <string name="delete_address">Delete address %s?</string>
 
 
 </resources>

@@ -6,6 +6,7 @@ import com.example.sberqrscanner.domain.login.Profile
 
 sealed class LoginEvent {
     object TryLogin: LoginEvent()
-    class CityChanged(val city: City?): LoginEvent()
+    class CityChanged(val city: String): LoginEvent()
     class AddressChanged(val address: Address?): LoginEvent()
+    class NewAddress(val city: String, val address: String): LoginEvent()
 }
