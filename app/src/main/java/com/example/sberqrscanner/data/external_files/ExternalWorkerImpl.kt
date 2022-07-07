@@ -1,19 +1,25 @@
 package com.example.sberqrscanner.data.external_files
 
 import android.app.Activity
+import android.content.ContentValues
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.pdf.PdfDocument
+import android.media.MediaScannerConnection
 import android.net.Uri
 import android.os.Build
 import android.os.Environment
+import android.provider.MediaStore
 import androidx.core.content.FileProvider
+import androidx.core.net.toFile
 import com.example.sberqrscanner.R
 import com.example.sberqrscanner.data.util.Reaction
 import com.example.sberqrscanner.data.util.getCurrentDate
 import com.example.sberqrscanner.data.util.toString
 import com.example.sberqrscanner.domain.external_files.ExternalStorageWorker
+import java.io.BufferedInputStream
 import java.io.File
+import java.io.FileInputStream
 import java.io.FileOutputStream
 
 class ExternalWorkerImpl: ExternalStorageWorker {
@@ -82,6 +88,7 @@ class ExternalWorkerImpl: ExternalStorageWorker {
                 reaction
             }
         }
+
     }
 
     override suspend fun shareFile(file: ExternalStorageWorker.FileOption, activity: Activity): Reaction<Unit> {
@@ -126,5 +133,4 @@ class ExternalWorkerImpl: ExternalStorageWorker {
             }
         }
     }
-
 }

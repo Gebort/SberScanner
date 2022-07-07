@@ -329,7 +329,14 @@ class FirestoreDivisionRep: DivisionRepository {
             if (cityDoc.result.size() <= 1) {
                 db.collection(CITIES)
                     .document(profile!!.city.id)
+                    .collection(ADDRESSES)
+                    .document(profile!!.address.id)
                     .delete()
+                    .continueWith {
+                        db.collection(CITIES)
+                            .document(profile!!.city.id)
+                            .delete()
+                    }
                     .await()
             }
             else {

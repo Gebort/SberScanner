@@ -75,9 +75,6 @@ class EditDivisionFragment : Fragment() {
         binding.buttonEdit.setOnClickListener {
             update()
         }
-        binding.buttonDownload.setOnClickListener {
-            downloadCode()
-        }
         binding.buttonShare.setOnClickListener {
             sendCode()
         }
@@ -107,12 +104,10 @@ class EditDivisionFragment : Fragment() {
                         binding.textName.text = state.selected.name
 
                         if (state.selected != oldState?.selected){
-                            binding.buttonDownload.isEnabled = false
                             binding.buttonShare.isEnabled = false
                             renderCode(state.selected.id)
                         }
 
-                        binding.buttonDownload.isEnabled = !state.loading
                         binding.buttonDelete.isEnabled = !state.loading
                         binding.buttonEdit.isEnabled = !state.loading
                         binding.buttonShare.isEnabled = !state.loading
@@ -124,9 +119,6 @@ class EditDivisionFragment : Fragment() {
         }
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED){
-                binding.buttonBack.setOnClickListener {
-                    findNavController().popBackStack()
-                }
                 model.uiEvents.collect { uiEvent ->
                     when (uiEvent) {
                         is EditDivisionUiEvent.Deleted -> {}
@@ -203,7 +195,6 @@ class EditDivisionFragment : Fragment() {
             val (qrCode, barcode) = awaitAll(codeQR, codeBar)
             val list = listOf(CodeImage(qrCode), CodeImage(barcode))
             adapter.changeList(list)
-            binding.buttonDownload.isEnabled = true
             binding.buttonShare.isEnabled = true
         }
     }

@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.fragment.app.FragmentContainerView
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.NavHostController
 import androidx.navigation.findNavController
 import com.example.sberqrscanner.MyApp
 import com.example.sberqrscanner.R
@@ -75,6 +76,20 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         }
+    }
+
+    override fun onSaveInstanceState(savedInstanceState: Bundle) {
+        val view: FragmentContainerView = findViewById(R.id.fragmentContainerView)
+        savedInstanceState.putBundle("nav_state", view.findNavController()
+            .saveState()
+        )
+        super.onSaveInstanceState(savedInstanceState)
+    }
+    override fun onRestoreInstanceState(savedInstanceState: Bundle) {
+        val view: FragmentContainerView = findViewById(R.id.fragmentContainerView)
+        view.findNavController()
+            .restoreState(savedInstanceState.getBundle("nav_state"))
+        super.onRestoreInstanceState(savedInstanceState)
     }
 
 }

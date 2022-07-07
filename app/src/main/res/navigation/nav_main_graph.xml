@@ -15,6 +15,7 @@
             app:destination="@id/editDivisionFragment"
             app:enterAnim="@android:anim/slide_in_left"
             app:exitAnim="@android:anim/slide_out_right"
+            app:launchSingleTop="true"
             app:popEnterAnim="@android:anim/slide_in_left"
             app:popExitAnim="@android:anim/slide_out_right"
             app:popUpToInclusive="false" />
@@ -29,6 +30,7 @@
             app:destination="@id/divisionListFragment"
             app:enterAnim="@android:anim/slide_in_left"
             app:exitAnim="@android:anim/slide_out_right"
+            app:launchSingleTop="true"
             app:popEnterAnim="@android:anim/slide_in_left"
             app:popExitAnim="@android:anim/slide_out_right"
             app:popUpToInclusive="false" />
@@ -65,6 +67,10 @@
     <action
         android:id="@+id/action_global_loginFragment"
         app:destination="@id/loginFragment"
+        app:enterAnim="@android:anim/slide_in_left"
+        app:exitAnim="@android:anim/slide_out_right"
+        app:popEnterAnim="@android:anim/slide_in_left"
+        app:popExitAnim="@android:anim/slide_out_right"
         app:popUpTo="@id/nav_main_graph"
         app:popUpToInclusive="true" />
 </navigation>

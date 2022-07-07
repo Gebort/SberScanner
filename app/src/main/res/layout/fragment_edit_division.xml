@@ -93,18 +93,6 @@
         app:layout_constraintStart_toStartOf="parent">
 
         <ImageButton
-            android:id="@+id/button_download"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:layout_gravity="center"
-            android:layout_marginRight="4dp"
-            android:layout_weight="0"
-            android:backgroundTint="#00FFFFFF"
-            android:contentDescription="@string/export"
-            android:scaleType="centerCrop"
-            android:src="@drawable/ic_download" />
-
-        <ImageButton
             android:id="@+id/button_share"
             android:layout_width="60dp"
             android:layout_height="60dp"
