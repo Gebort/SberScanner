@@ -183,7 +183,7 @@ class ScannerFragment : Fragment() {
                     requireActivity()
                 )
             ) {
-                val report = generateReport(model.state.value.divisions, requireContext())
+                val report = generateReport(model.state.value.divisions, model.profile(), requireContext())
                 when (sharePdf(report, requireActivity())){
                     is Reaction.Success -> {}
                     is Reaction.Error -> {

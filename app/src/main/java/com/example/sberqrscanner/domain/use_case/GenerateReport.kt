@@ -9,6 +9,7 @@ import android.graphics.pdf.PdfDocument.PageInfo
 import com.example.sberqrscanner.R
 import com.example.sberqrscanner.data.util.getCurrentDate
 import com.example.sberqrscanner.data.util.toString
+import com.example.sberqrscanner.domain.login.Profile
 import com.example.sberqrscanner.domain.model.Division
 
 private const val PAGE_HEIGHT = 1120
@@ -16,7 +17,7 @@ private const val PAGE_WIDTH = 792
 
 class GenerateReport {
 
-    operator fun invoke(divisions: List<Division>, context: Context): PdfDocument {
+    operator fun invoke(divisions: List<Division>, profile: Profile, context: Context): PdfDocument {
         val document = PdfDocument()
         val pageInfo = PageInfo.Builder(PAGE_WIDTH, PAGE_HEIGHT, 1).create()
         val page: PdfDocument.Page = document.startPage(pageInfo)
@@ -30,7 +31,11 @@ class GenerateReport {
         title.textAlign = Paint.Align.CENTER
         title.textSize = 24F
         val date = getCurrentDate().toString(context.resources.getString(R.string.date_format))
-        canvas.drawText("Отчет $date", PAGE_WIDTH/2F,30F , title)
+        val dateStr = context.resources.getString(R.string.report, date)
+        canvas.drawText(dateStr, PAGE_WIDTH/2F,30F , title)
+
+        title.textSize = 20F
+        canvas.drawText("${profile.city}, ${profile.address}", PAGE_WIDTH/2F,60F , title)
 
         title.textAlign = Paint.Align.LEFT
         title.textSize = 15F
@@ -43,16 +48,16 @@ class GenerateReport {
         val absentListStr = context.resources.getString(R.string.report_absent_list)
 
 
-        canvas.drawText(absentStr, 30F, 70F, title)
-        canvas.drawText(totalStr, 30F, 90F, title)
-        canvas.drawText(absentListStr, 30F, 120F, title)
+        canvas.drawText(absentStr, 30F, 100F, title)
+        canvas.drawText(totalStr, 30F, 120F, title)
+        canvas.drawText(absentListStr, 30F, 160F, title)
 
         for (i in 1..absentCount) {
-            if (120F+(i*20F)+40 < PAGE_HEIGHT) {
+            if (160F+(i*20F)+40 < PAGE_HEIGHT) {
                 canvas.drawText(
                     "$i. ${divisions[i - 1].name}",
                     30F,
-                    120F + (i * 20F),
+                    160F + (i * 20F),
                     title
                 )
             }
@@ -64,14 +69,12 @@ class GenerateReport {
                 canvas.drawText(
                     moreStr,
                     60F,
-                    120F + (i * 20F),
+                    160F + (i * 20F),
                     title
                 )
                 break
             }
         }
-
-
 
         document.finishPage(page)
 

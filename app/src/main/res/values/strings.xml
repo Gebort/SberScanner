@@ -51,6 +51,7 @@
     <string name="add_address_for_city">Type in new address for the city %s</string>
     <string name="address">%s</string>
     <string name="delete_address">Delete address %s?</string>
+    <string name="report">Report %s</string>
 
 
 </resources>

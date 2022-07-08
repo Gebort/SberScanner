@@ -46,6 +46,7 @@
     <string name="add_address_for_city">Введите новый адрес для города %s</string>
     <string name="address">%s</string>
     <string name="delete_address">Удалить адрес %s?</string>
+    <string name="report">Отчет %s</string>
 
 
 </resources>

@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.sberqrscanner.MyApp
 import com.example.sberqrscanner.R
 import com.example.sberqrscanner.data.util.Reaction
+import com.example.sberqrscanner.domain.login.Profile
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.channels.Channel
@@ -18,6 +19,7 @@ class DivisionCheckViewModel: ViewModel() {
     private val updateDivision = MyApp.instance!!.updateDivision
     private val exitProfile = MyApp.instance!!.exitProfile
     private val dropChecks = MyApp.instance!!.dropChecks
+    private val getProfile = MyApp.instance!!.getProfile
 
     private var _state = MutableStateFlow(DivisionCheckState())
     val state get() = _state.asStateFlow()
@@ -103,6 +105,10 @@ class DivisionCheckViewModel: ViewModel() {
                 }
             }
         }
+    }
+
+    fun profile(): Profile {
+        return getProfile()
     }
 
     private fun loadDivisions() {
