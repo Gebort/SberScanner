@@ -111,7 +111,7 @@ class DivisionListFragment : Fragment() {
                             ) {
                                 model.onEvent(DivisionListEvent.InsertDivision(
                                     name = uiEvent.division.name,
-                                    id = uiEvent.division.id
+                                    division = uiEvent.division
                                 ))
                             }
                         }
@@ -137,7 +137,7 @@ class DivisionListFragment : Fragment() {
                             ) {
                                 model.onEvent(DivisionListEvent.InsertDivision(
                                     name = uiEvent.division.name,
-                                    id = uiEvent.division.id
+                                    division = uiEvent.division
                                 ))
                             }
                         }

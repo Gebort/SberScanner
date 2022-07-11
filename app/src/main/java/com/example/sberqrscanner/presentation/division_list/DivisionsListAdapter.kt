@@ -1,5 +1,6 @@
 package com.example.sberqrscanner.presentation.division_list
 
+import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -32,9 +33,12 @@ class DivisionsListAdapter(
     }
 
     class ItemViewholder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        @SuppressLint("SetTextI18n")
         fun bind(item: Division, onClick: (Division) -> Unit) = with(itemView) {
             val textDivision: TextView = this.findViewById(R.id.text_division_name)
             textDivision.text = item.name
+            val numberDivision: TextView = this.findViewById(R.id.text_number_item)
+            numberDivision.text = "${item.number}."
             setOnClickListener {
                 onClick(item)
             }
@@ -42,7 +46,7 @@ class DivisionsListAdapter(
     }
 
     fun changeList(entries: List<Division>){
-        rawList = entries
+        rawList = entries.sortedBy { it.number }
         submitList(rawList)
     }
 }

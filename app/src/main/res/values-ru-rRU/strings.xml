@@ -47,6 +47,19 @@
     <string name="address">%s</string>
     <string name="delete_address">Удалить адрес %s?</string>
     <string name="report">Отчет %s</string>
+    <string name="division_number">Подразделение №%d</string>
+    <string name="floor">Этаж №%d</string>
+    <string name="wing">Крыло - %s</string>
+    <string name="phone">Телефон - %s</string>
+    <string name="fio">ФИО - %s</string>
+    <string name="new_name">Введите новое название</string>
+    <string name="new_number">Введите новый номер</string>
+    <string name="new_floor">Введите новый этаж</string>
+    <string name="new_wing">Введите новое крыло</string>
+    <string name="new_phone">Введите новый номер телефона</string>
+    <string name="new_fio">Введите новое ФИО</string>
+    <string name="checked">Отмечено</string>
+    <string name="date_format_small">dd.MM.yyyy</string>
 
 
 </resources>

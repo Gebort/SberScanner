@@ -6,6 +6,7 @@ import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.Color
 import android.os.Bundle
+import android.text.InputType
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -45,7 +46,6 @@ class EditDivisionFragment : Fragment() {
     private val checkRequestPerm = MyApp.instance!!.checkRequestPerm
     private val generateQRCode = MyApp.instance!!.generateQRCode
     private val generateCode128 = MyApp.instance!!.generateCode128
-    private val exportCode = MyApp.instance!!.exportCode
     private val shareCode = MyApp.instance!!.shareCode
     private val snackbar = MyApp.instance!!.createSnackbar
 
@@ -54,6 +54,10 @@ class EditDivisionFragment : Fragment() {
     private var _binding: FragmentEditDivisionBinding? = null
     private val binding get() = _binding!!
     private val adapter = CodeSliderAdapter()
+
+    private enum class Types {
+        NAME, NUMBER, FLOOR, WING, FIO, PHONE
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -73,7 +77,22 @@ class EditDivisionFragment : Fragment() {
             delete()
         }
         binding.buttonEdit.setOnClickListener {
-            update()
+            update(Types.NAME)
+        }
+        binding.buttonEditWing.setOnClickListener {
+            update(Types.WING)
+        }
+        binding.buttonEditPhone.setOnClickListener {
+            update(Types.PHONE)
+        }
+        binding.buttonEditNumber.setOnClickListener {
+            update(Types.NUMBER)
+        }
+        binding.buttonEditFloor.setOnClickListener {
+            update(Types.FLOOR)
+        }
+        binding.buttonEditFio.setOnClickListener {
+            update(Types.FIO)
         }
         binding.buttonShare.setOnClickListener {
             sendCode()
@@ -102,6 +121,11 @@ class EditDivisionFragment : Fragment() {
                     }
                     else {
                         binding.textName.text = state.selected.name
+                        binding.textFio.text = getString(R.string.fio, state.selected.fio)
+                        binding.textFloor.text = getString(R.string.floor, state.selected.floor)
+                        binding.textNumber.text = getString(R.string.division_number, state.selected.number)
+                        binding.textWing.text = getString(R.string.wing, state.selected.wing)
+                        binding.textPhone.text = getString(R.string.phone, state.selected.phone)
 
                         if (state.selected != oldState?.selected){
                             binding.buttonShare.isEnabled = false
@@ -110,6 +134,11 @@ class EditDivisionFragment : Fragment() {
 
                         binding.buttonDelete.isEnabled = !state.loading
                         binding.buttonEdit.isEnabled = !state.loading
+                        binding.buttonEditFio.isEnabled = !state.loading
+                        binding.buttonEditFloor.isEnabled = !state.loading
+                        binding.buttonEditNumber.isEnabled = !state.loading
+                        binding.buttonEditPhone.isEnabled = !state.loading
+                        binding.buttonEditWing.isEnabled = !state.loading
                         binding.buttonShare.isEnabled = !state.loading
 
                         oldState = state
@@ -152,15 +181,49 @@ class EditDivisionFragment : Fragment() {
     }
 
     @SuppressLint("CheckResult")
-    private fun update(){
+    private fun update(type: Types){
         model.state.value.selected?.let {
+            val titleId = when (type) {
+                Types.FIO -> { R.string.new_fio }
+                Types.FLOOR -> { R.string.new_floor }
+                Types.NAME -> { R.string.new_name }
+                Types.NUMBER -> { R.string.new_number }
+                Types.PHONE -> { R.string.new_phone }
+                Types.WING -> { R.string.new_wing }
+            }
+            val inputType = when (type) {
+                Types.FIO -> { InputType.TYPE_CLASS_TEXT }
+                Types.FLOOR -> { InputType.TYPE_CLASS_NUMBER }
+                Types.NAME -> { InputType.TYPE_CLASS_TEXT }
+                Types.NUMBER -> { InputType.TYPE_CLASS_NUMBER}
+                Types.PHONE -> { InputType.TYPE_CLASS_PHONE }
+                Types.WING -> { InputType.TYPE_CLASS_TEXT }
+            }
+
             MaterialDialog(requireContext()).show {
-                input(prefill = it.name) { _, text ->
-                    model.onEvent(DivisionEditEvent.UpdateSelected(
-                            name = text.toString()
+                input(
+                    prefill = when (type) {
+                        Types.FIO -> {it.fio}
+                        Types.FLOOR -> {it.floor.toString()}
+                        Types.NAME -> {it.name}
+                        Types.NUMBER -> {it.number.toString()}
+                        Types.PHONE -> {it.phone}
+                        Types.WING -> {it.wing}
+                    },
+                    inputType = inputType
+                ) { _, text ->
+                    model.onEvent(DivisionEditEvent.UpdateDivision(
+                        when (type) {
+                            Types.FIO -> {it.copy(fio = text.toString())}
+                            Types.FLOOR -> {it.copy(floor = text.toString().toInt())}
+                            Types.NAME -> {it.copy(name = text.toString())}
+                            Types.NUMBER -> {it.copy(number = text.toString().toInt())}
+                            Types.PHONE -> {it.copy(phone = text.toString())}
+                            Types.WING -> {it.copy(wing = text.toString())}
+                        }
                     ))
                 }
-                title(R.string.input_division_name)
+                title(titleId)
                 positiveButton(R.string.update)
                 negativeButton(R.string.cancel)
             }
@@ -227,36 +290,36 @@ class EditDivisionFragment : Fragment() {
         }
     }
 
-    private fun downloadCode(){
-            lifecycleScope.launch {
-                if (
-                    checkRequestPerm(
-                        Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                        REQUEST_STORAGE_PERMISSION_CODE,
-                        requireActivity()
-                    )
-                ) {
-                    when (val reaction = exportCode(getCurrentCode(), requireActivity())) {
-                        is Reaction.Success -> {
-                            snackbar(
-                                view = binding.codeViewpager,
-                                type = CreateSnackbar.Large,
-                                contentStr = resources.getString(
-                                    R.string.code_saved,
-                                    reaction.data)
-                            )
-                        }
-                        is Reaction.Error -> {
-                            snackbar(
-                                view = binding.codeViewpager,
-                                type = CreateSnackbar.Large,
-                                contentId = R.string.code_not_saved
-                            )
-                        }
-                    }
-                }
-            }
-    }
+//    private fun downloadCode(){
+//            lifecycleScope.launch {
+//                if (
+//                    checkRequestPerm(
+//                        Manifest.permission.WRITE_EXTERNAL_STORAGE,
+//                        REQUEST_STORAGE_PERMISSION_CODE,
+//                        requireActivity()
+//                    )
+//                ) {
+//                    when (val reaction = exportCode(getCurrentCode(), requireActivity())) {
+//                        is Reaction.Success -> {
+//                            snackbar(
+//                                view = binding.codeViewpager,
+//                                type = CreateSnackbar.Large,
+//                                contentStr = resources.getString(
+//                                    R.string.code_saved,
+//                                    reaction.data)
+//                            )
+//                        }
+//                        is Reaction.Error -> {
+//                            snackbar(
+//                                view = binding.codeViewpager,
+//                                type = CreateSnackbar.Large,
+//                                contentId = R.string.code_not_saved
+//                            )
+//                        }
+//                    }
+//                }
+//            }
+//    }
 
     private fun popBack(){
         findNavController().popBackStack()

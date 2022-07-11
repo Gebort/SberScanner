@@ -212,9 +212,14 @@ class ScannerFragment : Fragment() {
 
     @SuppressLint("CheckResult")
     fun checkDialog(division: Division){
+        val textStr = "${division.number}. ${division.name}\n" +
+                "${getString(R.string.floor, division.floor)}\n" +
+                "${getString(R.string.wing, division.wing)}\n" +
+                "${getString(R.string.fio, division.fio)}\n" +
+                "${getString(R.string.phone, division.phone)}\n"
         MaterialDialog(requireContext()).show {
             checkBoxPrompt(
-                text = division.name,
+                text = getString(R.string.checked),
                 isCheckedDefault = division.checked
             ) { checked ->
                 if (checked) {
@@ -224,7 +229,7 @@ class ScannerFragment : Fragment() {
                     model.onEvent(DivisionCheckEvent.UncheckDivision(division))
                 }
             }
-            title(R.string.check_manual)
+            title(text = textStr)
             positiveButton { R.string.confirm }
         }
     }

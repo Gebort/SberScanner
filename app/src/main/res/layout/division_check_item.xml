@@ -7,6 +7,16 @@
     android:paddingBottom="10dp">
 
     <TextView
+        android:id="@+id/text_number_item"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="8dp"
+        android:layout_weight="0"
+        android:fontFamily="sans-serif-medium"
+        android:text="81."
+        android:textSize="20sp" />
+
+    <TextView
         android:id="@+id/text_division_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

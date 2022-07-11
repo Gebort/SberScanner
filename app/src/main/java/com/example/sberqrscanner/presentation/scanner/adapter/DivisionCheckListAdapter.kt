@@ -1,5 +1,6 @@
 package com.example.sberqrscanner.presentation.scanner.adapter
 
+import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -34,9 +35,12 @@ class DivisionCheckListAdapter(
     }
 
     class ItemViewholder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        @SuppressLint("SetTextI18n")
         fun bind(division: Division, onClick: (Division) -> Unit) = with(itemView) {
             val textDivision: TextView = this.findViewById(R.id.text_division_name)
             textDivision.text = division.name
+            val numberDivision: TextView = this.findViewById(R.id.text_number_item)
+            numberDivision.text = "${division.number}."
             val imageView: ImageView = this.findViewById(R.id.image_check)
             imageView.setImageResource(
                 if (division.checked) R.drawable.ic_check else R.drawable.ic_absent
@@ -48,7 +52,7 @@ class DivisionCheckListAdapter(
     }
 
     fun changeList(entries: List<Division>){
-        rawList = entries
+        rawList = entries.sortedBy { it.number }
         //filter = ""
         submitList(rawList)
     }
@@ -60,6 +64,6 @@ class DiffCallback : DiffUtil.ItemCallback<Division>() {
     }
 
     override fun areContentsTheSame(oldItem: Division, newItem: Division): Boolean {
-        return oldItem.checked == newItem.checked
+        return oldItem == newItem
     }
 }

@@ -18,6 +18,11 @@ private const val ADDRESS = "address"
 private const val DIVISIONS = "divisions"
 private const val NAME = "name"
 private const val CHECKED = "checked"
+private const val NUMBER = "number"
+private const val FLOOR = "floor"
+private const val WING = "wing"
+private const val PHONE = "phone"
+private const val FIO = "fio"
 
 class FirestoreDivisionRep: DivisionRepository {
 
@@ -46,15 +51,32 @@ class FirestoreDivisionRep: DivisionRepository {
                     trySend(Reaction.Error(error))
                 } else {
                     val list = value?.documents?.filterNot {
-                        it.getString(NAME) == null || it.getBoolean(CHECKED) == null
+                                it.getString(NAME) == null ||
+                                it.getBoolean(CHECKED) == null ||
+                                it.getLong(NUMBER) == null ||
+                                it.getLong(FLOOR) == null ||
+                                it.getString(WING) == null ||
+                                it.getString(PHONE) == null ||
+                                it.getString(FIO) == null
                     }?.map { docSnap ->
                         val id = docSnap.id
                         val name = docSnap.getString(NAME)
                         val checked = docSnap.getBoolean(CHECKED)
+                        val number = docSnap.getLong(NUMBER)
+                        val floor = docSnap.getLong(FLOOR)
+                        val wing = docSnap.getString(WING)
+                        val phone = docSnap.getString(PHONE)
+                        val fio = docSnap.getString(FIO)
+
                         Division(
                             id = id,
                             name = name!!,
-                            checked = checked!!
+                            checked = checked!!,
+                            number = number!!.toInt(),
+                            floor = floor!!.toInt(),
+                            wing = wing!!,
+                            phone = phone!!,
+                            fio = fio!!
                         )
                     } ?: listOf()
                     trySend(Reaction.Success(list))
@@ -70,22 +92,19 @@ class FirestoreDivisionRep: DivisionRepository {
         }
     }
 
-    override suspend fun insertDivision(name: String, id: String?): Reaction<Unit> {
+    override suspend fun insertDivision(name: String, division: Division?): Reaction<Unit> {
         if (profile == null) {
             throw Exception("Unauthorized access")
         }
         val db = Firebase.firestore
         return try {
-            if (id == null) {
+            if (division == null) {
                 db.collection(CITIES)
                     .document(profile!!.city.id)
                     .collection(ADDRESSES)
                     .document(profile!!.address.id)
                     .collection(DIVISIONS)
-                    .add(hashMapOf(
-                        NAME to name,
-                        CHECKED to false
-                    ))
+                    .add(getDefaultMap(name))
                     .await()
             } else {
                 db.collection(CITIES)
@@ -93,8 +112,8 @@ class FirestoreDivisionRep: DivisionRepository {
                     .collection(ADDRESSES)
                     .document(profile!!.address.id)
                     .collection(DIVISIONS)
-                    .document(id)
-                    .set(hashMapOf(Pair(NAME, name)))
+                    .document(division.id)
+                    .set(getHashMap(division))
                     .await()
             }
 
@@ -104,7 +123,7 @@ class FirestoreDivisionRep: DivisionRepository {
         }
     }
 
-    override suspend fun updateDivision(division: Division): Reaction<Unit> {
+    override suspend fun updateDivision(division: Division): Reaction<Division> {
         if (profile == null) {
             throw Exception("Unauthorized access")
         }
@@ -116,14 +135,9 @@ class FirestoreDivisionRep: DivisionRepository {
                 .document(profile!!.address.id)
                 .collection(DIVISIONS)
                 .document(division.id)
-                .set(
-                    hashMapOf(
-                        NAME to division.name,
-                        CHECKED to division.checked
-                    )
-                )
+                .set(getHashMap(division))
                 .await()
-            Reaction.Success(Unit)
+            Reaction.Success(division)
         } catch (e: Exception) {
             Reaction.Error(e)
         }
@@ -379,6 +393,31 @@ class FirestoreDivisionRep: DivisionRepository {
     override fun exitProfile() {
         profile = null
         getDivisionsFlow = null
+    }
+
+    private fun getDefaultMap(name: String):HashMap<String, Any> {
+        return getHashMap(Division(
+            id = "",
+            name = name,
+            floor = 0,
+            checked = false,
+            number = 0,
+            wing = "-",
+            phone = "-",
+            fio = "-"
+        ))
+    }
+
+    private fun getHashMap(division: Division): HashMap<String, Any> {
+        return hashMapOf(
+            NAME to division.name,
+            CHECKED to division.checked,
+            NUMBER to division.number,
+            FLOOR to division.floor,
+            WING to division.wing,
+            PHONE to division.phone,
+            FIO to division.fio
+        )
     }
 }
 

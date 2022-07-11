@@ -52,6 +52,21 @@
     <string name="address">%s</string>
     <string name="delete_address">Delete address %s?</string>
     <string name="report">Report %s</string>
+    <string name="division_number">Division №%d</string>
+    <string name="floor">Floor №%d</string>
+    <string name="wing">Wing - %s</string>
+    <string name="phone">Phone - %s</string>
+    <string name="fio">Name - %s</string>
+    <string name="new_name">Type in new division name</string>
+    <string name="new_number">Type in new division number</string>
+    <string name="new_floor">Type in new division floor</string>
+    <string name="new_wing">Type in new division wing</string>
+    <string name="new_phone">Type in new division phone</string>
+    <string name="new_fio">Type in new name</string>
+    <string name="checked">Checked</string>
+    <string name="date_format_small">dd.MM.yyyy</string>
+
+
 
 
 </resources>

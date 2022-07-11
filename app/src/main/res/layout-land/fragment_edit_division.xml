@@ -17,15 +17,17 @@
 
         <TextView
             android:id="@+id/text_name"
-            android:layout_width="300dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="32dp"
-            android:layout_marginEnd="32dp"
+            android:layout_width="0dp"
+            android:layout_height="75dp"
+            android:layout_marginTop="16dp"
             android:fontFamily="sans-serif-medium"
             android:text="ПАО Сбербанк - Дальний Восток по Хабаровскому Краю и так далее"
             android:textAlignment="center"
             android:textSize="20sp"
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:autoSizeMaxTextSize="30sp"
+            app:autoSizeMinTextSize="14sp"
+            app:autoSizeStepGranularity="1sp"
+            app:autoSizeTextType="uniform"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="@+id/guideline2"
             app:layout_constraintTop_toTopOf="parent" />
@@ -81,7 +83,6 @@
                 android:layout_width="60dp"
                 android:layout_height="60dp"
                 android:layout_gravity="center"
-                android:layout_marginRight="4dp"
                 android:layout_weight="1"
                 android:backgroundTint="#00FFFFFF"
                 android:contentDescription="@string/delete"
@@ -89,11 +90,21 @@
                 android:src="@drawable/ic_delete" />
 
             <ImageButton
+                android:id="@+id/button_edit"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
+                android:backgroundTint="#00FFFFFF"
+                android:contentDescription="@string/edit"
+                android:scaleType="centerCrop"
+                android:src="@drawable/ic_edit" />
+
+            <ImageButton
                 android:id="@+id/button_share"
                 android:layout_width="60dp"
                 android:layout_height="60dp"
                 android:layout_gravity="center"
-                android:layout_marginLeft="4dp"
                 android:layout_weight="1"
                 android:backgroundTint="#00FFFFFF"
                 android:contentDescription="@string/share"
@@ -101,24 +112,140 @@
                 android:src="@drawable/ic_share" />
         </LinearLayout>
 
-        <ImageButton
-            android:id="@+id/button_edit"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:backgroundTint="#00FFFFFF"
-            android:contentDescription="@string/edit"
-            android:scaleType="centerCrop"
-            android:src="@drawable/ic_edit"
-            app:layout_constraintEnd_toEndOf="@+id/text_name"
-            app:layout_constraintStart_toStartOf="@+id/text_name"
-            app:layout_constraintTop_toBottomOf="@+id/text_name" />
-
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/guideline2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical"
             app:layout_constraintGuide_percent="0.5" />
+
+        <TextView
+            android:id="@+id/text_number"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:fontFamily="sans-serif-medium"
+            android:text="Подразделение №8"
+            android:textSize="16sp"
+            app:layout_constraintStart_toStartOf="@+id/guideline2"
+            app:layout_constraintTop_toBottomOf="@+id/text_name" />
+
+        <ImageButton
+            android:id="@+id/button_edit_number"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:layout_weight="0"
+            android:backgroundTint="#00FFFFFF"
+            android:contentDescription="@string/edit"
+            android:scaleType="centerCrop"
+            android:src="@drawable/ic_edit"
+            app:layout_constraintBottom_toBottomOf="@+id/text_number"
+            app:layout_constraintStart_toEndOf="@+id/text_number"
+            app:layout_constraintTop_toTopOf="@+id/text_number" />
+
+        <TextView
+            android:id="@+id/text_floor"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_weight="1"
+            android:fontFamily="sans-serif-medium"
+            android:gravity="center"
+            android:text="Этаж №3"
+            android:textSize="14sp"
+            app:layout_constraintStart_toStartOf="@+id/guideline2"
+            app:layout_constraintTop_toBottomOf="@+id/text_number" />
+
+        <ImageButton
+            android:id="@+id/button_edit_floor"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:layout_weight="0"
+            android:backgroundTint="#00FFFFFF"
+            android:scaleType="centerCrop"
+            android:src="@drawable/ic_edit"
+            app:layout_constraintBottom_toBottomOf="@+id/text_floor"
+            app:layout_constraintStart_toEndOf="@+id/text_floor"
+            app:layout_constraintTop_toTopOf="@+id/text_floor" />
+
+        <TextView
+            android:id="@+id/text_wing"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_weight="1"
+            android:fontFamily="sans-serif-medium"
+            android:gravity="center"
+            android:text="Крыло - прав"
+            android:textSize="14sp"
+            app:layout_constraintStart_toStartOf="@+id/guideline2"
+            app:layout_constraintTop_toBottomOf="@+id/text_floor" />
+
+        <ImageButton
+            android:id="@+id/button_edit_wing"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:layout_weight="0"
+            android:backgroundTint="#00FFFFFF"
+            android:scaleType="centerCrop"
+            android:src="@drawable/ic_edit"
+            app:layout_constraintBottom_toBottomOf="@+id/text_wing"
+            app:layout_constraintStart_toEndOf="@+id/text_wing"
+            app:layout_constraintTop_toTopOf="@+id/text_wing" />
+
+        <TextView
+            android:id="@+id/text_phone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:fontFamily="sans-serif-medium"
+            android:gravity="center"
+            android:text="89243506578"
+            android:textSize="14sp"
+            app:layout_constraintStart_toStartOf="@+id/guideline2"
+            app:layout_constraintTop_toBottomOf="@+id/text_fio" />
+
+        <ImageButton
+            android:id="@+id/button_edit_phone"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:layout_weight="0"
+            android:backgroundTint="#00FFFFFF"
+            android:scaleType="centerCrop"
+            android:src="@drawable/ic_edit"
+            app:layout_constraintBottom_toBottomOf="@+id/text_phone"
+            app:layout_constraintStart_toEndOf="@+id/text_phone"
+            app:layout_constraintTop_toTopOf="@+id/text_phone" />
+
+        <TextView
+            android:id="@+id/text_fio"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_weight="1"
+            android:fontFamily="sans-serif-medium"
+            android:gravity="center"
+            android:text="Смит Павел Сергеевич"
+            android:textSize="14sp"
+            app:layout_constraintStart_toStartOf="@+id/guideline2"
+            app:layout_constraintTop_toBottomOf="@+id/text_wing" />
+
+        <ImageButton
+            android:id="@+id/button_edit_fio"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:layout_weight="0"
+            android:backgroundTint="#00FFFFFF"
+            android:scaleType="centerCrop"
+            android:src="@drawable/ic_edit"
+            app:layout_constraintBottom_toBottomOf="@+id/text_fio"
+            app:layout_constraintStart_toEndOf="@+id/text_fio"
+            app:layout_constraintTop_toTopOf="@+id/text_fio" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

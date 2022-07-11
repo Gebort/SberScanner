@@ -7,7 +7,7 @@ import com.example.sberqrscanner.domain.repository.DivisionRepository
 class UpdateDivision(
     private val repository: DivisionRepository
 ) {
-    suspend operator fun invoke(division: Division): Reaction<Unit> {
+    suspend operator fun invoke(division: Division): Reaction<Division> {
         return repository.updateDivision(division)
     }
 }
