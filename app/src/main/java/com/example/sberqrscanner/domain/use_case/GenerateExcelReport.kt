@@ -14,7 +14,7 @@ import org.apache.poi.ss.util.CellRangeAddress
 
 class GenerateExcelReport {
 
-    operator fun invoke(divisions: List<Division>, profile: Profile, context: Context): HSSFWorkbook {
+    suspend operator fun invoke(divisions: List<Division>, profile: Profile, context: Context): HSSFWorkbook {
 
         val hssfWorkbook = HSSFWorkbook()
         val dateLite = getCurrentDate().toString(context.resources.getString(R.string.date_format_small))
@@ -65,8 +65,12 @@ class GenerateExcelReport {
         hssfSheet.addMergedRegion(CellRangeAddress(7,7, 8, 13 ))
 
         val totalCount = divisions.size
-        val absent = divisions.filter { !it.checked }
-        val checked = divisions.filter { it.checked }
+        val absent = divisions
+            .filter { !it.checked }
+            .sortedBy { it.number }
+        val checked = divisions
+            .filter { it.checked }
+            .sortedBy { it.number }
         val absentCount = absent.count()
 
         val absentStr = context.resources.getString(R.string.report_absent, absentCount)

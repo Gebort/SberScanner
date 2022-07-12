@@ -18,7 +18,7 @@ private const val PADDING = 30F
 
 class GenerateReport {
 
-    operator fun invoke(divisions: List<Division>, profile: Profile, context: Context): PdfDocument {
+    suspend operator fun invoke(divisions: List<Division>, profile: Profile, context: Context): PdfDocument {
 
         val title = Paint()
         title.typeface = Typeface.create(Typeface.DEFAULT, Typeface.NORMAL)
@@ -50,12 +50,17 @@ class GenerateReport {
         title.textAlign = Paint.Align.LEFT
         title.textSize = 15F
         val totalCount = divisions.size
-        val absent = divisions.filter { !it.checked }
-        val absentCount = absent.count()
+        val absent = divisions
+            .filter { !it.checked }
+            .sortedBy { it.number }
+        val checked = divisions
+            .filter { it.checked }
+            .sortedBy { it.number }
 
-        val absentStr = context.resources.getString(R.string.report_absent, absentCount)
+        val absentStr = context.resources.getString(R.string.report_absent, absent.count())
         val totalStr = context.resources.getString(R.string.report_total, totalCount)
         val absentListStr = context.resources.getString(R.string.report_absent_list)
+        val checkedListStr = context.resources.getString(R.string.report_checked_list)
 
 
      //   canvas.drawText(absentStr, 30F, 100F, title)
@@ -80,13 +85,29 @@ class GenerateReport {
             title
         )
 
-        for (i in 1 .. absentCount) {
+        for (i in 0 until absent.count()) {
             writer.writeInDoc(
                     30F,
                     20F,
-                    "$i. ${absent[i - 1].name}",
+                    "${absent[i].number}. ${absent[i].name}",
                     title
                 )
+        }
+
+        writer.writeInDoc(
+            30F,
+            40F,
+            checkedListStr,
+            title
+        )
+
+        for (i in 0 until checked.count()) {
+            writer.writeInDoc(
+                30F,
+                20F,
+                "${checked[i].number}. ${checked[i].name}",
+                title
+            )
         }
 
 
