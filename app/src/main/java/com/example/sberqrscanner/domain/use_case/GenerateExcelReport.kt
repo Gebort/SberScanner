@@ -94,39 +94,7 @@ class GenerateExcelReport {
         cell8F.setCellValue(context.getString(R.string.phone_r))
         cell8G.setCellValue(context.getString(R.string.fio_r))
 
-        for (i in 0 until absentCount) {
-            //ABSENT LIST DATA
-            val rowi = hssfSheet.createRow(i + 9)
-            val celliB = rowi.createCell(1)
-            val celliC = rowi.createCell(2)
-            val celliD = rowi.createCell(3)
-            val celliE = rowi.createCell(4)
-            val celliF = rowi.createCell(5)
-            val celliG = rowi.createCell(6)
-            celliB.setCellValue(absent[i].number.toString())
-            celliC.setCellValue(absent[i].name)
-            celliD.setCellValue(absent[i].floor.toString())
-            celliE.setCellValue(absent[i].wing)
-            celliF.setCellValue(absent[i].phone)
-            celliG.setCellValue(absent[i].fio)
-            //CHECKED LIST DATA
-            if (i < checked.count()) {
-                val celliI = rowi.createCell(8)
-                val celliJ = rowi.createCell(9)
-                val celliK = rowi.createCell(10)
-                val celliL = rowi.createCell(11)
-                val celliM = rowi.createCell(12)
-                val celliN = rowi.createCell(13)
-                celliI.setCellValue(checked[i].number.toString())
-                celliJ.setCellValue(checked[i].name)
-                celliK.setCellValue(checked[i].floor.toString())
-                celliL.setCellValue(checked[i].wing)
-                celliM.setCellValue(checked[i].phone)
-                celliN.setCellValue(checked[i].fio)
-            }
-        }
-
-        // CHECKED LIST HEAD
+        //CHECK LIST HEAD
 
         val cell8I = row8.createCell(8)
         val cell8J = row8.createCell(9)
@@ -141,6 +109,59 @@ class GenerateExcelReport {
         cell8L.setCellValue(context.getString(R.string.wing_r))
         cell8M.setCellValue(context.getString(R.string.phone_r))
         cell8N.setCellValue(context.getString(R.string.fio_r))
+
+        val maxShare = if (absent.count() > checked.count()) checked.count() else absent.count()
+
+        for (i in 0 until maxShare) {
+            //ABSEND LIST DATA
+            val rowi = hssfSheet.createRow(i + 9)
+            val celliB = rowi.createCell(1)
+            val celliC = rowi.createCell(2)
+            val celliD = rowi.createCell(3)
+            val celliE = rowi.createCell(4)
+            val celliF = rowi.createCell(5)
+            val celliG = rowi.createCell(6)
+            celliB.setCellValue(absent[i].number.toString())
+            celliC.setCellValue(absent[i].name)
+            celliD.setCellValue(absent[i].floor.toString())
+            celliE.setCellValue(absent[i].wing)
+            celliF.setCellValue(absent[i].phone)
+            celliG.setCellValue(absent[i].fio)
+
+            //CHECKED LIST DATA
+            val celliI = rowi.createCell(8)
+            val celliJ = rowi.createCell(9)
+            val celliK = rowi.createCell(10)
+            val celliL = rowi.createCell(11)
+            val celliM = rowi.createCell(12)
+            val celliN = rowi.createCell(13)
+            celliI.setCellValue(checked[i].number.toString())
+            celliJ.setCellValue(checked[i].name)
+            celliK.setCellValue(checked[i].floor.toString())
+            celliL.setCellValue(checked[i].wing)
+            celliM.setCellValue(checked[i].phone)
+            celliN.setCellValue(checked[i].fio)
+        }
+
+        val extra = if (absent.count() > checked.count()) absent else checked
+        val cell_start = if (absent.count() > checked.count()) 1 else 8
+
+        //EXTRA ABSENT OR CHECKED DATA
+        for (i in maxShare until extra.count()) {
+            val rowi = hssfSheet.createRow(i + 9)
+            val celli0 = rowi.createCell(cell_start)
+            val celli1 = rowi.createCell(cell_start+1)
+            val celli2 = rowi.createCell(cell_start+2)
+            val celli3 = rowi.createCell(cell_start+3)
+            val celli4 = rowi.createCell(cell_start+4)
+            val celli5 = rowi.createCell(cell_start+5)
+            celli0.setCellValue(extra[i].number.toString())
+            celli1.setCellValue(extra[i].name)
+            celli2.setCellValue(extra[i].floor.toString())
+            celli3.setCellValue(extra[i].wing)
+            celli4.setCellValue(extra[i].phone)
+            celli5.setCellValue(extra[i].fio)
+        }
 
         return hssfWorkbook
     }
