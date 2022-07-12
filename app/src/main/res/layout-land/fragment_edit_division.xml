@@ -185,7 +185,7 @@
             android:textSize="14sp"
             app:layout_constraintStart_toStartOf="@+id/guideline2"
             app:layout_constraintTop_toBottomOf="@+id/text_floor"
-            app:layout_constraintWidth_max="310dp" />
+            app:layout_constraintWidth_max="300dp" />
 
         <ImageButton
             android:id="@+id/button_edit_wing"
@@ -211,7 +211,7 @@
             android:textSize="14sp"
             app:layout_constraintStart_toStartOf="@+id/guideline2"
             app:layout_constraintTop_toBottomOf="@+id/text_fio"
-            app:layout_constraintWidth_max="310dp" />
+            app:layout_constraintWidth_max="300dp" />
 
         <ImageButton
             android:id="@+id/button_edit_phone"
@@ -238,7 +238,7 @@
             android:textSize="14sp"
             app:layout_constraintStart_toStartOf="@+id/guideline2"
             app:layout_constraintTop_toBottomOf="@+id/text_wing"
-            app:layout_constraintWidth_max="310dp" />
+            app:layout_constraintWidth_max="300dp" />
 
         <ImageButton
             android:id="@+id/button_edit_fio"
