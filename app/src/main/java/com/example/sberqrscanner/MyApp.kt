@@ -39,11 +39,12 @@ class MyApp: Application() {
     val generateCode128 = GenerateCode128(codeGenerator)
 
     private val externalStorageWorker = ExternalWorkerImpl()
-    val exportCode = ExportCode(externalStorageWorker)
     val shareCode = ShareCode(externalStorageWorker)
     val sharePdf = SharePdf(externalStorageWorker)
+    val shareExcel = ShareExcel(externalStorageWorker)
 
     val generateReport = GenerateReport()
+    val generateExcelReport = GenerateExcelReport()
 
     val checkPermission = CheckPermission()
     val checkRequestPerm = CheckRequestPerm(checkPermission)

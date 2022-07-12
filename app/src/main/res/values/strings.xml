@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">SberScanner</string>
     <string name="divisions">Divisions</string>
+    <string name="division">Division</string>
     <string name="edit">Edit</string>
     <string name="add">Add</string>
     <string name="back">Back</string>
@@ -35,6 +36,7 @@
     <string name="report_absent" translatable="false">Отсутствует подразделений - %d</string>
     <string name="report_total" translatable="false">Всего подразделений - %d</string>
     <string name="report_absent_list" translatable="false">Отсутствующие:</string>
+    <string name="report_checked_list" translatable="false">Присутствующие:</string>
     <string name="report_absent_more" translatable="false">ещё %d подразделения…</string>
     <string name="check_manual">Manual change</string>
     <string name="ok">OK</string>
@@ -65,8 +67,12 @@
     <string name="new_fio">Type in new name</string>
     <string name="checked">Checked</string>
     <string name="date_format_small">dd.MM.yyyy</string>
-
-
-
+    <string name="pdf_file">PDF file</string>
+    <string name="excel_file">Excel file</string>
+    <string name="division_number_r">Division</string>
+    <string name="floor_r">Floor</string>
+    <string name="wing_r">Wing</string>
+    <string name="phone_r">Phone</string>
+    <string name="fio_r">Name</string>
 
 </resources>

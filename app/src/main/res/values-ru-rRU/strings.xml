@@ -2,6 +2,7 @@
 <resources>
     <string name="app_name">SberScanner</string>
     <string name="divisions">Подразделения</string>
+    <string name="division">Подразделение</string>
     <string name="edit">Изменить</string>
     <string name="add">Добавить</string>
     <string name="back">Назад</string>
@@ -60,6 +61,12 @@
     <string name="new_fio">Введите новое ФИО</string>
     <string name="checked">Отмечено</string>
     <string name="date_format_small">dd.MM.yyyy</string>
-
+    <string name="pdf_file">PDF файл</string>
+    <string name="excel_file">Excel файл</string>
+    <string name="division_number_r">Номер</string>
+    <string name="floor_r">Этаж</string>
+    <string name="wing_r">Крыло</string>
+    <string name="phone_r">Телефон</string>
+    <string name="fio_r">ФИО</string>
 
 </resources>

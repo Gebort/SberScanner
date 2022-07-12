@@ -80,11 +80,11 @@ class GenerateReport {
             title
         )
 
-        for (i in 1..absentCount) {
+        for (i in 1 .. absentCount) {
             writer.writeInDoc(
                     30F,
                     20F,
-                    "$i. ${divisions[i - 1].name}",
+                    "$i. ${absent[i - 1].name}",
                     title
                 )
         }

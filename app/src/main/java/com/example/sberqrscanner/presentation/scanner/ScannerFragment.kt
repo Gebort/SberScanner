@@ -18,6 +18,8 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.checkbox.checkBoxPrompt
+import com.afollestad.materialdialogs.list.listItems
+import com.afollestad.materialdialogs.list.listItemsSingleChoice
 import com.example.sberqrscanner.BuildConfig
 import com.example.sberqrscanner.MyApp
 import com.example.sberqrscanner.R
@@ -41,7 +43,9 @@ class ScannerFragment : Fragment() {
 
     private val bindCamera = MyApp.instance!!.bindCamera
     private val sharePdf = MyApp.instance!!.sharePdf
+    private val shareExcel = MyApp.instance!!.shareExcel
     private val generateReport = MyApp.instance!!.generateReport
+    private val generateExcelReport = MyApp.instance!!.generateExcelReport
     private val checkRequestPerm = MyApp.instance!!.checkRequestPerm
     private val snackbar = MyApp.instance!!.createSnackbar
 
@@ -78,7 +82,7 @@ class ScannerFragment : Fragment() {
             findNavController().navigate(action)
         }
         binding.buttonMakeReport.setOnClickListener {
-            sendReport()
+            reportTypeDialog()
         }
         binding.buttonRefresh.setOnClickListener {
             clearChecks()
@@ -174,8 +178,8 @@ class ScannerFragment : Fragment() {
         }
     }
 
-    private fun sendReport(){
-        lifecycleScope.launch {
+    @SuppressLint("CheckResult")
+    private fun reportTypeDialog(){
             if (
                 checkRequestPerm(
                     Manifest.permission.WRITE_EXTERNAL_STORAGE,
@@ -183,8 +187,49 @@ class ScannerFragment : Fragment() {
                     requireActivity()
                 )
             ) {
-                val report = generateReport(model.state.value.divisions, model.profile(), requireContext())
-                when (sharePdf(report, requireActivity())){
+                val choice = listOf(
+                    getString(R.string.pdf_file),
+                    getString(R.string.excel_file)
+                )
+
+                MaterialDialog(requireContext()).show {
+                    listItemsSingleChoice(items = choice) { dialog, index, text ->
+                        viewLifecycleOwner.lifecycleScope.launch {
+                            when (text) {
+                                choice[0] -> {
+                                    sendReport(Types.PDF)
+                                }
+                                choice[1] -> {
+                                    sendReport(Types.EXCEL)
+                                }
+                            }
+                        }
+                    }
+                    title(res = R.string.share_report)
+                }
+            }
+        }
+
+    private suspend fun sendReport(reportType: Types){
+                val res = when (reportType) {
+                    Types.PDF -> {
+                        val report = generateReport(
+                            model.state.value.divisions,
+                            model.profile(),
+                            requireContext()
+                        )
+                        sharePdf(report, requireActivity())
+                    }
+                    Types.EXCEL -> {
+                        val report = generateExcelReport(
+                            model.state.value.divisions,
+                            model.profile(),
+                            requireContext()
+                        )
+                        shareExcel(report, requireActivity())
+                    }
+                }
+                when (res){
                     is Reaction.Success -> {}
                     is Reaction.Error -> {
                         Snackbar.make(
@@ -195,8 +240,6 @@ class ScannerFragment : Fragment() {
                             .show()
                     }
                 }
-            }
-        }
     }
 
     private fun clearChecks(){
@@ -243,4 +286,11 @@ class ScannerFragment : Fragment() {
             title(R.string.change_workplace)
         }
     }
+
+    private companion object {
+        enum class Types {
+            PDF, EXCEL
+        }
+    }
+
 }

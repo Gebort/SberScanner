@@ -34,6 +34,10 @@ class ExternalWorkerImpl: ExternalStorageWorker {
                     val timeStr = getCurrentDate().toString("dd.MM.yyyy_HH.mm")
                     "Report_${timeStr}.pdf"
                 }
+                is ExternalStorageWorker.FileOption.Excel -> {
+                    val timeStr = getCurrentDate().toString("dd.MM.yyyy_HH.mm")
+                    "Report_${timeStr}.xls"
+                }
                 else -> {
                     throw Exception("getUri: No realisation for this type")
                 }
@@ -52,6 +56,10 @@ class ExternalWorkerImpl: ExternalStorageWorker {
                     }
                     is ExternalStorageWorker.FileOption.Pdf -> {
                         option.data.writeTo(fileOutputStream)
+                        true
+                    }
+                    is ExternalStorageWorker.FileOption.Excel -> {
+                        option.data.write(fileOutputStream)
                         true
                     }
                     else -> {
@@ -77,20 +85,6 @@ class ExternalWorkerImpl: ExternalStorageWorker {
         }
     }
 
-    override suspend fun exportFile(file: ExternalStorageWorker.FileOption, activity: Activity): Reaction<String?> {
-        return when (val reaction = getUri(file, activity)) {
-            is Reaction.Success -> {
-                val uri = reaction.data
-                activity.sendBroadcast(Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, uri))
-                Reaction.Success(uri.path)
-            }
-            is Reaction.Error -> {
-                reaction
-            }
-        }
-
-    }
-
     override suspend fun shareFile(file: ExternalStorageWorker.FileOption, activity: Activity): Reaction<Unit> {
         return when (val reaction = getUri(file, activity)){
             is Reaction.Success -> {
@@ -103,6 +97,9 @@ class ExternalWorkerImpl: ExternalStorageWorker {
                     is ExternalStorageWorker.FileOption.Pdf -> {
                         "application/pdf"
                     }
+                    is ExternalStorageWorker.FileOption.Excel -> {
+                        "application/vnd.ms-excel"
+                    }
                     else -> {
                         throw Exception("shareFile: No realisation for this type")
                     }
@@ -112,6 +109,9 @@ class ExternalWorkerImpl: ExternalStorageWorker {
                         R.string.share_image
                     }
                     is ExternalStorageWorker.FileOption.Pdf -> {
+                        R.string.share_report
+                    }
+                    is ExternalStorageWorker.FileOption.Excel -> {
                         R.string.share_report
                     }
                     else -> {
