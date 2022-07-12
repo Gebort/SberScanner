@@ -166,7 +166,7 @@ class GenerateExcelReport {
             celli4.setCellValue(extra[i].phone)
             celli5.setCellValue(extra[i].fio)
         }
-
+        
         return hssfWorkbook
     }
 }

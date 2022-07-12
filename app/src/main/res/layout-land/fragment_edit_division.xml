@@ -129,7 +129,8 @@
             android:text="Подразделение №8"
             android:textSize="16sp"
             app:layout_constraintStart_toStartOf="@+id/guideline2"
-            app:layout_constraintTop_toBottomOf="@+id/text_name" />
+            app:layout_constraintTop_toBottomOf="@+id/text_name"
+            app:layout_constraintWidth_max="310dp" />
 
         <ImageButton
             android:id="@+id/button_edit_number"
@@ -156,7 +157,8 @@
             android:text="Этаж №3"
             android:textSize="14sp"
             app:layout_constraintStart_toStartOf="@+id/guideline2"
-            app:layout_constraintTop_toBottomOf="@+id/text_number" />
+            app:layout_constraintTop_toBottomOf="@+id/text_number"
+            app:layout_constraintWidth_max="310dp" />
 
         <ImageButton
             android:id="@+id/button_edit_floor"
@@ -182,7 +184,8 @@
             android:text="Крыло - прав"
             android:textSize="14sp"
             app:layout_constraintStart_toStartOf="@+id/guideline2"
-            app:layout_constraintTop_toBottomOf="@+id/text_floor" />
+            app:layout_constraintTop_toBottomOf="@+id/text_floor"
+            app:layout_constraintWidth_max="310dp" />
 
         <ImageButton
             android:id="@+id/button_edit_wing"
@@ -207,7 +210,8 @@
             android:text="89243506578"
             android:textSize="14sp"
             app:layout_constraintStart_toStartOf="@+id/guideline2"
-            app:layout_constraintTop_toBottomOf="@+id/text_fio" />
+            app:layout_constraintTop_toBottomOf="@+id/text_fio"
+            app:layout_constraintWidth_max="310dp" />
 
         <ImageButton
             android:id="@+id/button_edit_phone"
@@ -233,7 +237,8 @@
             android:text="Смит Павел Сергеевич"
             android:textSize="14sp"
             app:layout_constraintStart_toStartOf="@+id/guideline2"
-            app:layout_constraintTop_toBottomOf="@+id/text_wing" />
+            app:layout_constraintTop_toBottomOf="@+id/text_wing"
+            app:layout_constraintWidth_max="310dp" />
 
         <ImageButton
             android:id="@+id/button_edit_fio"

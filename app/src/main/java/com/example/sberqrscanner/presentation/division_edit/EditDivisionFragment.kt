@@ -210,7 +210,15 @@ class EditDivisionFragment : Fragment() {
                         Types.PHONE -> {it.phone}
                         Types.WING -> {it.wing}
                     },
-                    inputType = inputType
+                    inputType = inputType,
+                    maxLength = when (type) {
+                        Types.FIO -> null
+                        Types.FLOOR -> 2
+                        Types.NAME -> null
+                        Types.NUMBER -> 5
+                        Types.PHONE -> null
+                        Types.WING -> null
+                    }
                 ) { _, text ->
                     model.onEvent(DivisionEditEvent.UpdateDivision(
                         when (type) {

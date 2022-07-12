@@ -35,7 +35,7 @@ class ExternalWorkerImpl: ExternalStorageWorker {
                     "Report_${timeStr}.pdf"
                 }
                 is ExternalStorageWorker.FileOption.Excel -> {
-                    val timeStr = getCurrentDate().toString("dd.MM.yyyy_HH.mm")
+                    val timeStr = getCurrentDate().toString("dd.MM")
                     "Report_${timeStr}.xls"
                 }
                 else -> {
