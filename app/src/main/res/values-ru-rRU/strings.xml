@@ -17,7 +17,7 @@
     <string name="provide_permissions">Пожалуйста, предоставьте разрешения</string>
     <string name="out_of">%d из %d</string>
     <string name="out_of_divisions">%d из %d подразделений</string>
-    <string name="total_divisions">%d подразделений</string>
+    <string name="total_divisions">Подразделений - %d</string>
     <string name="start_scan">Начать сканирование</string>
     <string name="division_deleted">Удалено - %s</string>
     <string name="export">Экспортировать</string>

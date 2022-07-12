@@ -12,7 +12,7 @@
     <string name="error_happened">Error happened. Check your internet connection</string>
     <string name="division_deleted">Deleted - "%s"</string>
     <string name="start_scan">Start scanning</string>
-    <string name="total_divisions">%d divisions</string>
+    <string name="total_divisions">Divisions - %d</string>
     <string name="out_of">%d out of %d</string>
     <string name="out_of_divisions">%d out of %d divisions</string>
     <string name="provide_permissions">Please, provide the permission</string>
